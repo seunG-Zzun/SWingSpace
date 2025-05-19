@@ -1,0 +1,54 @@
+초기(버젼 만들때다)
+git init
+git add 파일명  --> staging하는건데, 작업폴더를 staging area에 넣는것이다. if)여러개 -> git add 파일1 파일2, 전부 스테이징: git add .
+git commit -m "메세지"  --> repository에 넣는 행위인데, staging area에서 넣어야한다.
+
+상태창!! git status(뭐하는지 까먹었을때도 스면됨)
+
+스테이징 취소 git restore --staged 파일명
+
+git log -> Head: 현재위치
+
+git diff --> 현재 파일내용과 가장 최근 commit한 내용이 어떤차이가 있는지 보여줌
+
+git diff 커밋id [커밋id2]
+
+커밋과 다르게 복사본을 만들어 최근 성공한 파일을 유지 - branch - 신규기능을 안전하게 추가해볼 수 있음
+
+git branch 브랜치명
+
+만든 브랜치로 이동 -> git switch 브랜치명
+
+원래 브랜치로 이동 -> git switch main(master)
+
+브랜치에서 짠 코드가 맘에들면 통합하면됨(메인과) 
+--> 우선 메인으로 이동(git switch main)
+--> git merge 브랜치명(합칠 브랜치)
+
+합칠 때, main의 A부분과 branch의 A부분 둘 다 수정되면 충돌 발생 -> 에디터로 해당 파일을 열어서 원하는 코드마 남기고 지우기 ->이후 add, commit -> git merge "conflict"
+
+
+
+
+
+
+
+
+
+
+
+Q. 얼마나 자주 commit 하는게 좋음?
+
+A. ctrl + s 누르는 것 처럼 5초마다 습관적으로 할 이유는 없고 
+
+간단한 기능을 하나 추가할 때 마다 commit 하면 됩니다. 
+ 
+예를 들어 웹개발시 회원가입기능을 만든다고 하면 
+
+- 회원가입 폼 레이아웃을 만들면 commit 하고 
+
+- 입력한 이메일이 맞는지 검증하는 기능을 만들었으면 commit 하고 
+
+- 서버에 전송하는 기능을 만들었으면 commit 하고 
+
+대충 이렇게 작은 작업하나 마쳤으면 commit 하는게 좋습니다. 
