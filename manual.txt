@@ -25,7 +25,7 @@ git branch 브랜치명
 --> 우선 메인으로 이동(git switch main)
 --> git merge 브랜치명(합칠 브랜치)
 
-합칠 때, main의 A부분과 branch의 A부분 둘 다 수정되면 충돌 발생 -> 에디터로 해당 파일을 열어서 원하는 코드마 남기고 지우기 ->이후 add, commit -> git merge "conflict"
+합칠 때, main의 A부분과 branch의 A부분 둘 다 수정되면 충돌 발생 -> 에디터로 해당 파일을 열어서 원하는 코드만남기고 지우기 ->이후 add, commit -> git merge "conflict"
 
 
 
