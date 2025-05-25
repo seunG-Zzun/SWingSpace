@@ -21,7 +21,7 @@ exports.login = (req, res) => {
   const user = users.find(user => user.studentId === studentId && user.password === password);
 
   if (!user) {
-=======
+
   const user = users.find(user => user.studentId=== studentId && user.password === password);
   if (user) {
     return res.json({ success: true, message: '로그인 성공!' });
