@@ -1,0 +1,36 @@
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  gap: 12px;
+}
+
+.signup-form input {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.signup-form button {
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.signup-form button:hover {
+  background-color: #125aa2;
+}
+
+.signup-form select{
+  padding: 10px;
+  font-size: 1rem;
+}

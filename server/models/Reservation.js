@@ -1,5 +1,6 @@
 class Reservation {
-    constructor(reservationId, spaceId, startTime, endTime) {
+    constructor(studentId, reservationId, spaceId, startTime, endTime) {
+      this.studentId = studentId;
       this.reservationId = reservationId;
       this.spaceId = spaceId;
       this.startTime = startTime;

@@ -1,4 +1,40 @@
+const reservationService = require('../services/reservationService');
+const TimeUtils = require('../utils/TimeUtils'); // ✅ 꼭 import 필요!
+
 exports.createReservation = (req, res) => {
-    res.json({ success: true, message: '예약이 성공적으로 생성되었습니다.' });
+  const { studentId, spaceId, startTime, endTime } = req.body;
+
+  if (!studentId || !spaceId || !startTime || !endTime) {
+    return res.status(400).json({ success: false, message: '모든 필드를 입력해주세요.' });
+  }
+
+  const result = reservationService.createReservation(studentId, spaceId, startTime, endTime);
+
+  const readableData = {
+    ...result.data,
+    startTimeStr: TimeUtils.toTimeString(result.data.startTime),
+    endTimeStr: TimeUtils.toTimeString(result.data.endTime)
   };
-  
+
+  res.status(200).json({
+    success: result.success,
+    message: result.message,
+    data: readableData
+  });
+};
+
+
+exports.cancelReservation = (req, res) => {
+  const { reservationId } = req.body;
+  const result = reservationService.cancelReservation(reservationId);
+  res.status(result.success ? 200 : 400).json(result);
+};
+
+exports.extendReservation = (req, res) => {
+  const { reservationId } = req.body;
+
+  const now = TimeUtils.getNowDecimal();
+
+  const result = reservationService.extendReservation(reservationId, now);
+  res.status(result.success ? 200 : 400).json(result);
+};
