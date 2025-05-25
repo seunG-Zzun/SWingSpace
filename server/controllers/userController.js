@@ -15,13 +15,13 @@ exports.signUp = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const { userId, password } = req.body;
+  const { studentId, password } = req.body;
 
   const user = users.find(user => user.studentId=== studentId && user.password === password);
   if (user) {
     return res.json({ success: true, message: '로그인 성공!' });
   } else {
-    return res.status(401).json({ success: false, message: '로그인 실패. 학번번 또는 비밀번호 확인.' });
+    return res.status(401).json({ success: false, message: '로그인 실패. 학번 또는 비밀번호 확인.' });
   }
 };
 exports.users = users;
