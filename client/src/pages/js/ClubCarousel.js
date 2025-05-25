@@ -11,7 +11,7 @@ import club7 from '../../assets/logos/WINK.png';
 const logoList = [club1, club2, club3, club4, club5, club6, club7];
 
 function ClubCarousel() {
-  const extendedLogos = [...logoList, ...logoList, ...logoList, ...logoList];
+  const extendedLogos = [...logoList, ...logoList];
 
   return (
     <div className="carousel-container">

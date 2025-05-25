@@ -7,7 +7,6 @@ function Home() {
   return (
     <div className="home-container">
           <div className="carousel-section">
-        <h3>참여 동아리</h3>
         <ClubCarousel />
       </div>
       <h1 className="project-title">SWingSpace</h1>
