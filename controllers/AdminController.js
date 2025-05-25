@@ -14,12 +14,13 @@ exports.addWarning = (req, res) => {
 
   user.addWarning();
 
-  if (user.warningCount >= 4) {
-    user.isBanned = true;
+  if (user.isBanned()) {
+    console.log("이 사용자는 정지되었습니다.");
   }
 
   return res.json({ success: true, message: '경고 부여 완료', data: user });
 };
+
 
 exports.removeUser = (req, res) => {
   const { studentId } = req.params;
