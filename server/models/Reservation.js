@@ -1,13 +1,13 @@
 class Reservation {
-    constructor(studentId, reservationId, spaceId, startTime, endTime) {
-      this.studentId = studentId;
-      this.reservationId = reservationId;
-      this.spaceId = spaceId;
-      this.startTime = startTime;
-      this.endTime = endTime;
-      this.club = club;
-      this.status = "reserved";
-    }
+  constructor(studentId, reservationId, spaceId, startTime, endTime, club) {
+    this.studentId = studentId;
+    this.reservationId = reservationId;
+    this.spaceId = spaceId;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.club = club;
+    this.status = "reserved";
+  }
   
     extend() {
       this.endTime += 1.0;

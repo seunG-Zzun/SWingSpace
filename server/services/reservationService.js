@@ -1,5 +1,14 @@
+const Space = require('../models/Space');
 const Reservation = require('../models/Reservation');
 const { createResponse } = require('../utils/response');
+
+const spaces = [
+  new Space(1),
+  new Space(2),
+  new Space(3),
+  new Space(4)
+];
+
 
 const reservations = [];
 exports.createReservation = (studentId, spaceId, startTime, endTime, club) => {
