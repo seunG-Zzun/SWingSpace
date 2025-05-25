@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import '../css/Home.css';
-import ClubCarousel
- from './ClubCarousel';
+import ClubCarousel from './ClubCarousel';
 function Home() {
   const navigate = useNavigate();
 
