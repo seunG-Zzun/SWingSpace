@@ -2,13 +2,31 @@ const Reservation = require('../models/Reservation');
 const { createResponse } = require('../utils/response');
 
 const reservations = [];
-
-exports.createReservation = (studentId, spaceId, startTime, endTime) => {
+exports.createReservation = (studentId, spaceId, startTime, endTime, club) => {
   const id = `${studentId}_${Date.now()}`;
-  const res = new Reservation(id, studentId, spaceId, startTime, endTime);
+
+  const currentReservations = reservations.filter(r =>
+    r.spaceId === spaceId &&
+    r.status === 'reserved' &&
+    r.startTime < endTime &&
+    r.endTime > startTime
+  );
+
+  const hasOtherClub = currentReservations.some(r => r.club !== club);
+  if (hasOtherClub) {
+    return createResponse(false, '다른 동아리원이 이미 예약한 테이블입니다.');
+  }
+
+  if (currentReservations.length >= 6) {
+    return createResponse(false, '예약 인원이 가득 찼습니다 (최대 6명).');
+  }
+
+  const res = new Reservation(id, studentId, spaceId, startTime, endTime, club);
   reservations.push(res);
+
   return createResponse(true, '예약 성공', res);
 };
+
 
 exports.cancelReservation = (reservationId) => {
   const reservation = reservations.find(r => r.reservationId === reservationId);

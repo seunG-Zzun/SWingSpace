@@ -5,6 +5,7 @@ class Reservation {
       this.spaceId = spaceId;
       this.startTime = startTime;
       this.endTime = endTime;
+      this.club = club;
       this.status = "reserved";
     }
   

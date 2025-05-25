@@ -1,18 +1,15 @@
 class User {
-  constructor( name, studentId, password, role) {
+  constructor(name, studentId, password, role, club) {
     this.name = name;
     this.studentId = studentId;
     this.password = password;
     this.role = role;
-    this.warningCount = 0;
+    this.club = club;
+    this.warningCount = 0; // 초기 경고 수
   }
 
   addWarning() {
     this.warningCount++;
-  }
-  isBanned(){
-    this.isBanned = false;
-
   }
 
   isBanned() {

@@ -1,0 +1,26 @@
+.carousel-container {
+  overflow: hidden;
+  width:100%;
+  background: rgb(156, 232, 156);
+}
+
+.carousel-track {
+  display: flex;
+  width: fit-content;
+  animation: scroll-left 20s linear infinite;
+}
+
+.club-logo {
+  width: 120px;
+  height: auto;
+  margin: 0 20px;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(-10%);
+  }
+  100% {
+    transform: translateX(-30%);
+  }
+}
