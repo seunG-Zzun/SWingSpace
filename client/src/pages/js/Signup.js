@@ -7,7 +7,8 @@ function Signup() {
     name: '',
     studentId: '',
     password: '',
-    role: ''
+    role: '',
+    club: ''
   });
 
   const handleChange = (e) => {
@@ -18,7 +19,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/signup', form);
+      const res = await axios.post('/users/signup', form);
       alert(res.data.message);
     } catch (err) {
       alert(err.response?.data?.message || '회원가입 실패');

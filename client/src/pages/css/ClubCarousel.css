@@ -7,7 +7,7 @@
 .carousel-track {
   display: flex;
   width: fit-content;
-  animation: scroll-left 20s linear infinite;
+  animation: scroll-left-right 4s ease-in-out infinite;
 }
 
 .club-logo {
@@ -16,11 +16,20 @@
   margin: 0 20px;
 }
 
-@keyframes scroll-left {
+@keyframes scroll-left-right {
   0% {
     transform: translateX(-10%);
   }
+  25% {
+    transform: translateX(-15%);
+  }
+  50% {
+    transform: translateX(-5%);
+  }
+  75% {
+    transform: translateX(-15%);
+  }
   100% {
-    transform: translateX(-30%);
+    transform: translateX(-10%);
   }
 }

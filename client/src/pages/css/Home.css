@@ -32,3 +32,9 @@
 .home-button:hover {
   background-color: #125aa2;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+.project-title {
+  font-family: 'Pacifico', cursive;
+}
