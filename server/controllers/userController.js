@@ -17,9 +17,16 @@ exports.signUp = (req, res) => {
 exports.login = (req, res) => {
   const { studentId, password } = req.body;
 
+<<<<<<< HEAD:controllers/userController.js
   const user = users.find(user => user.studentId === studentId && user.password === password);
 
   if (!user) {
+=======
+  const user = users.find(user => user.studentId=== studentId && user.password === password);
+  if (user) {
+    return res.json({ success: true, message: '로그인 성공!' });
+  } else {
+>>>>>>> f66ef0cc49e7732d05981aa128608ffaf4d955eb:server/controllers/userController.js
     return res.status(401).json({ success: false, message: '로그인 실패. 학번 또는 비밀번호 확인.' });
   }
 
