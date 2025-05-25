@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/Signup.css';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '',
     studentId: '',
@@ -21,6 +23,8 @@ function Signup() {
     try {
       const res = await axios.post('/users/signup', form);
       alert(res.data.message);
+      navigate('/');
+
     } catch (err) {
       alert(err.response?.data?.message || '회원가입 실패');
     }

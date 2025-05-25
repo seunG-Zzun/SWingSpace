@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/Login.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
-    const [form, setForm] = useState({
-        studentId: '',
-        password: ''
-    });
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    studentId: '',
+    password: ''
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,7 +20,7 @@ function Login() {
     try {
       const res = await axios.post('/users/login', form);
       alert(res.data.message);
-      // 로그인 성공 시 리다이렉트 또는 상태 저장
+      navigate('/reservation');
     } catch (err) {
       alert(err.response?.data?.message || '로그인 실패');
     }

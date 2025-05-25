@@ -1,10 +1,6 @@
 .carousel-container {
   overflow: hidden;
   width: 100%;
-  /* background-image: url('../../assets/container_background.png');  /* 이미지 경로에 맞게 수정 */
-  /* background-size: contain;
-  background-repeat: repeat;
-  background-position: center; */
   background: rgb(177, 228, 255);
 }
 

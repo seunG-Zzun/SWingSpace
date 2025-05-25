@@ -1,0 +1,69 @@
+.reservation-wrapper {
+  padding: 32px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* 테이블 카드 2x2 그리드 */
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 16px;
+}
+
+/* 각 테이블 카드 박스 */
+.table-card {
+  border: 1.5px solid #ddd;
+  border-radius: 12px;
+  padding: 28px 0;
+  text-align: center;
+  font-size: 18px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.table-card:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+/* 선택된 테이블 아래 좌석 선택 영역 */
+.seat-section {
+  margin-top: 40px;
+}
+
+/* 좌석 박스 6개 수평 배치 */
+.seat-grid {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* 좌석 하나 */
+.seat-box {
+  width: 60px;
+  height: 60px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+.seat-box:hover {
+  background-color: #f0f0f0;
+}
+
+/* 예약된 좌석 스타일 (JS에서 reserved 시 적용 가능) */
+.seat-box.reserved {
+  background-color: #bbb;
+  cursor: not-allowed;
+  color: #fff;
+}
