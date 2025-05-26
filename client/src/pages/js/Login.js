@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/Login.css';
 
-<<<<<<< HEAD
 
-=======
 function Login() {
     const [form, setForm] = useState({
         studentId: '',
@@ -40,4 +38,4 @@ function Login() {
 }
 
 export default Login;
->>>>>>> 41da4f867908b2f6b7c103c6f2330ec8652c4b53
+

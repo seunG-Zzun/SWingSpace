@@ -5,7 +5,7 @@ class User {
     this.password = password;
     this.role = role;
     this.club = club;
-    this.warningCount = 0; // 초기 경고 수
+    this.warningCount = 0;
   }
 
   addWarning() {

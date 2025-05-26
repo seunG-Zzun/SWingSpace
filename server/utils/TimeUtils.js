@@ -14,8 +14,16 @@ const TimeUtils = {
     getNowDecimal() {
       const now = new Date();
       return now.getHours() + now.getMinutes() / 60;
+    },
+
+    formatFullTime(date, startTime, endTime) {
+      const start = this.toTimeString(startTime);
+      const end = this.toTimeString(endTime);
+      return `${date} ${start} ~ ${end}`;
     }
+    
   };
+  
   
   module.exports = TimeUtils;
   
