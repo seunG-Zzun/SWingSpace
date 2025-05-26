@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import '../css/Reservationpage.css';
 import { useNavigate} from 'react-router-dom';
 import userIcon from '../../assets/user-icon.png';
@@ -29,9 +29,40 @@ function Reservationpage() {
     setSelectedTable(tableId);
   };
 
-  const handleSeatClick = (seatIndex) => {
-    alert(`${selectedTable}번 테이블 ${seatIndex + 1}번 좌석 예약`);
-    // axios.post(...) 예약 요청 가능
+  const handleSeatClick = async (seatIndex) => {
+    console.log('좌석 클릭됨:', seatIndex);  // 확인용 로그
+    if (!date || !startTime || !endTime || !selectedTable) {
+      alert('날짜, 시간, 테이블을 모두 선택해주세요.');
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.studentId || !user.club) {
+      alert('로그인이 되어 있어야 하며, 학번과 동아리 정보가 필요합니다.');
+      return;
+    }
+
+    const reservationData = {
+      studentId: user.studentId,     // e.g., '20221234'
+      spaceId: selectedTable,        // table 번호
+      startTime: Number(startTime),
+      endTime: Number(endTime),
+      club: user.club,               // e.g., '배달의민족'
+      seatIndex: seatIndex,          // 0부터 시작
+      date: date                     // 'YYYY-MM-DD'
+    };
+
+    try {
+      const res = await axios.post('/users/reservations', reservationData);
+      if (res.data.success) {
+        alert('예약이 완료되었습니다!');
+      } else {
+        alert(`예약 실패: ${res.data.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('서버 오류로 인해 예약에 실패했습니다.');
+    }
   };
   const myPageClick = () => {
     const user = localStorage.getItem('user');

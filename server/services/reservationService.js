@@ -8,45 +8,18 @@ const spaces = [
   new Space(3),
   new Space(4)
 ];
-exports.getAllReservations = () => {
-  return createResponse(true, '전체 예약 목록', reservations);
-};
 
-exports.getReservationsByDate = (date) => {
-  const filtered = reservations
-    .filter(r => r.date === date && r.status === 'reserved')
-    .sort((a, b) => a.startTime - b.startTime);
-
-  return createResponse(true, `${date} 예약 목록`, filtered);
-};
-
-exports.getReservationsByStudent = (studentId) => {
-  const filtered = reservations
-    .filter(r => r.studentId === studentId && r.status === 'reserved')
-    .sort((a, b) => {
-      if (a.date === b.date) return a.startTime - b.startTime;
-      return a.date.localeCompare(b.date);
-    });
-
-  return createResponse(true, `${studentId}의 예약 목록`, filtered);
-};
 
 const reservations = [];
-exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatIndex, date) => {
+exports.createReservation = (studentId, spaceId, startTime, endTime, club) => {
   const id = `${studentId}_${Date.now()}`;
 
   const currentReservations = reservations.filter(r =>
     r.spaceId === spaceId &&
     r.status === 'reserved' &&
-    r.date===date&&
     r.startTime < endTime &&
     r.endTime > startTime
   );
-
-  const seatTaken = currentReservations.some(r => r.seatIndex === seatIndex);
-  if (seatTaken) {
-    return createResponse(false, `${seatIndex}번 좌석은 이미 예약되었습니다.`);
-  }
 
   const hasOtherClub = currentReservations.some(r => r.club !== club);
   if (hasOtherClub) {
@@ -57,12 +30,11 @@ exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatI
     return createResponse(false, '예약 인원이 가득 찼습니다 (최대 6명).');
   }
 
-  const res = new Reservation(id, studentId, spaceId, startTime, endTime, club, seatIndex);
+  const res = new Reservation(id, studentId, spaceId, startTime, endTime, club);
   reservations.push(res);
 
   return createResponse(true, '예약 성공', res);
 };
-
 
 
 exports.cancelReservation = (reservationId) => {
@@ -82,7 +54,6 @@ exports.extendReservation = (reservationId, now) => {
     r.spaceId === reservation.spaceId &&
     r.reservationId !== reservationId &&
     r.status === 'reserved' &&
-    r.date === reservation.date &&
     r.startTime < reservation.endTime + 1.0 &&
     r.endTime > reservation.endTime
   );
@@ -93,4 +64,9 @@ exports.extendReservation = (reservationId, now) => {
 
   reservation.extend();
   return createResponse(true, '예약이 1시간 연장되었습니다.', reservation);
+};
+
+exports.getReservationsByStudent = (studentId) => { //tmp
+  const myReservations = reservations.filter(r => r.studentId === studentId);
+  return createResponse(true, '예약 목록 조회 성공', myReservations);
 };

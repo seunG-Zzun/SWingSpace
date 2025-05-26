@@ -61,12 +61,15 @@ exports.getReservationsByDate = (req, res) => {
 };
 exports.getReservationsByStudent = (req, res) => {
   const { studentId } = req.query;
-
-  if (!studentId) {
-    return res.status(400).json({ success: false, message: 'studentId가 필요합니다.' });
-  }
+  console.log('[DEBUG] 요청된 studentId:', studentId);
 
   const result = reservationService.getReservationsByStudent(studentId);
+  console.log('[DEBUG] 서비스 결과:', result);
+
+  if (!result || !result.success) {
+    return res.status(500).json({ success: false, message: '예약 조회 실패' });
+  }
+
   const readable = result.data.map(r => ({
     ...r,
     timeRangeStr: TimeUtils.formatFullTime(r.date, r.startTime, r.endTime),
@@ -74,12 +77,13 @@ exports.getReservationsByStudent = (req, res) => {
     endTimeStr: TimeUtils.toTimeString(r.endTime)
   }));
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: result.message,
     data: readable
   });
 };
+
 
 
 

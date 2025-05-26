@@ -22,8 +22,8 @@ function MyPage() {
   // 2. 예약 정보 불러오기
   const loadReservations = async (studentId) => {
     try {
-      const res = await axios.get(`/users/reservations?studentId=${studentId}`);
-      setReservations(res.data); // 서버에서 사용자 예약 목록 반환
+      const res = await axios.get(`/reservation/my?studentId=${studentId}`); //오류류
+      setReservations(res.data.data); // 서버에서 사용자 예약 목록 반환
     } catch (err) {
       console.error(err);
       alert('예약 정보를 불러오는 데 실패했습니다.');

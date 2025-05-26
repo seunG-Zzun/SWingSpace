@@ -32,11 +32,15 @@ exports.login = (req, res) => {
   return res.json({ success: true, message: '로그인 성공!, 예약페이지로 이동합니다.',user:user });
 };
 
+// exports.createReservation = (req, res) => { //tmp
+//   const { studentId, spaceId, seatIndex, date, startTime, endTime, club } = req.body;
+//   // 예약 처리 로직
+// };
 
-exports.getReservations = (req, res) => { //tmp
-  const { studentId } = req.query;
-  const userReservations = reservations.filter(r => r.studentId === studentId);
-  res.json(userReservations);
-};
+// exports.getReservations = (req, res) => { //tmp
+//   const { studentId } = req.query;
+//   const userReservations = reservations.filter(r => r.studentId === studentId);
+//   res.json(userReservations);
+// };
 
 exports.users = users;

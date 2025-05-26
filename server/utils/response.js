@@ -10,3 +10,9 @@ exports.error = (message = '오류', status = 500) => ({
   message,
   status,
 });
+
+exports.createResponse = (success, message, data = null) => ({
+  success,
+  message,
+  data
+});
