@@ -31,6 +31,7 @@ function Home() {
           <>
             <div className="logout-group">
               <button onClick={() => navigate('/signup')} className="logout-button">회원가입</button>
+              <span className="divider-text">또는</span>
               <button onClick={() => navigate('/login')} className="logout-button">로그인</button>
             </div>
           </>

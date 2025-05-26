@@ -1,7 +1,27 @@
-.login-group{
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+.project-title {
+  font-size: 3rem;
+  font-family: 'Pacifico', cursive;
+  color: #222;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+.welcome-message {
+  margin-top: 30px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #2c3e50;
+  background-color: #f0f4f8;
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.login-groups{
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
   display: flex;
   gap: 10px;
 }
@@ -35,23 +55,27 @@
 .login-button:hover, .logout-button:hover {
   background-color: rgb(255, 137, 72)
 }
-
-.welcome-message {
-  margin-top: 30px;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #2c3e50;
-  background-color: #f0f4f8;
-  padding: 10px 20px;
-  border-radius: 8px;
-  display: inline-block;
+.logout-group {
+  display: flex;
+  justify-content: center;
+  gap: 20px; 
+  margin-top: 20px;
 }
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
-.project-title {
-  font-size: 3rem;
-  font-family: 'Pacifico', cursive;
-  color: #222;
-  margin-top: 40px;
-  margin-bottom: 10px;
+.logout-button {
+  padding: 10px 16px;
+  background-color: #ffa06a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.divider-text {
+  position: relative;
+  top: 8px;
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
 }

@@ -119,10 +119,12 @@ function Reservationpage() {
 };
   return (
     <>
+    <div className="login-groups">
     <button className="mypage-button" onClick={myPageClick}>
-        <img src= { userIcon } alt="사용자 아이콘" className="icon-img" />마이페이지</button>
+        <img src= { userIcon } alt="사용자 아이콘" className="icon-img" /> MyPage</button>
     <button className="home-button" onClick={goHome}>
-        <img src= { homeIcon } alt="사용자 아이콘" className="icon-img" />첫 화면으로</button>
+        <img src= { homeIcon } alt="사용자 아이콘" className="icon-img" /> Home</button>
+    </div>
 
     <div className="reservation-wrapper">
       <h2>예약 날짜 선택</h2>
@@ -175,15 +177,25 @@ function Reservationpage() {
             <div className="seat-section">
               <h4>{selectedTable}번 테이블 좌석</h4>
               <div className="seat-grid">
-                {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="seat-box"
-                    onClick={() => handleSeatClick(i)}
-                  >
-                    {i + 1}번
-                  </div>
-                ))}
+                {[...Array(6)].map((_, i) => {
+                  const isReserved = reservationsByDate.some(r =>
+                    r.spaceId === selectedTable &&
+                    r.seatIndex === i &&
+                    r.status === 'reserved' &&
+                    Number(startTime) < r.endTime &&
+                    Number(endTime) > r.startTime
+                  );
+
+                  return (
+                    <div
+                      key={i}
+                      className={`seat-box ${isReserved ? 'reserved' : ''}`}
+                      onClick={() => !isReserved && handleSeatClick(i)}
+                    >
+                      {i + 1}번
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

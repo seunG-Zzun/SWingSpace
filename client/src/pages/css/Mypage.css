@@ -73,3 +73,22 @@
   font-weight: bold;
   color: #c0392b;
 }
+
+.reservation-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px;
+  background-color: rgb(255, 163, 102);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.reservation-button:hover {
+  background-color: rgb(255, 137, 72)
+}
