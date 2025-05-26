@@ -23,3 +23,9 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);
 });
+
+
+app.use('/users', (req, res, next) => {
+  console.log('[SERVER] 요청 경로:', req.method, req.originalUrl);
+  next();
+});

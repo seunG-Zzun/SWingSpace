@@ -1,6 +1,6 @@
 const users = [];
 const User = require('../models/User');
-
+const reservations = []; //tmp
 exports.signUp = (req, res) => {
   console.log(req.body);
   const { name, studentId, password, role, club } = req.body;
@@ -13,7 +13,7 @@ exports.signUp = (req, res) => {
 
   const newUser = new User(name, studentId, password, role, club);
   users.push(newUser);
-  res.json({ success: true, message: `회원가입 완료: ${studentId}`, data: newUser });
+  res.json({ success: true, message: `회원가입 완료: 환영합니다. ${name}, ${studentId}`, data: newUser });
 };
 
 exports.login = (req, res) => {
@@ -29,8 +29,14 @@ exports.login = (req, res) => {
     return res.status(403).json({ success: false, message: '이 사용자는 정지되었습니다.' });
   }
 
-  return res.json({ success: true, message: '로그인 성공!',user:user });
+  return res.json({ success: true, message: '로그인 성공!, 예약페이지로 이동합니다.',user:user });
 };
 
+
+exports.getReservations = (req, res) => { //tmp
+  const { studentId } = req.query;
+  const userReservations = reservations.filter(r => r.studentId === studentId);
+  res.json(userReservations);
+};
 
 exports.users = users;

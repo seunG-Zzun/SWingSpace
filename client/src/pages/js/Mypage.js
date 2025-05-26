@@ -22,7 +22,7 @@ function MyPage() {
   // 2. 예약 정보 불러오기
   const loadReservations = async (studentId) => {
     try {
-      const res = await axios.get(`/api/reservations?studentId=${studentId}`);
+      const res = await axios.get(`/users/reservations?studentId=${studentId}`);
       setReservations(res.data); // 서버에서 사용자 예약 목록 반환
     } catch (err) {
       console.error(err);

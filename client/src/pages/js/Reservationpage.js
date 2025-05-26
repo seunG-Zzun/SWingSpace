@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import axios from 'axios';
 import '../css/Reservationpage.css';
 import { useNavigate} from 'react-router-dom';
-
+import userIcon from '../../assets/user-icon.png';
 function Reservationpage() {
   const navigate = useNavigate();
 
@@ -45,7 +45,8 @@ function Reservationpage() {
   
   return (
     <>
-    <button className="mypage-button" onClick={myPageClick}>마이페이지</button>
+    <button className="mypage-button" onClick={myPageClick}>
+        <img src= { userIcon } alt="사용자 아이콘" className="icon-img" />마이페이지</button>
     <div className="reservation-wrapper">
       <h2>예약 날짜 선택</h2>
       <input
