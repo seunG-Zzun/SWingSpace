@@ -43,10 +43,10 @@ function Signup() {
             <option value="">---------------동아리 선택---------------</option>
             <option value="AIM">AIM</option>
             <option value="DOUM">DO, UM</option>
+            <option value="FOSCAR">FOSCAR</option>
             <option value="KOBOT">KOBOT</option>
             <option value="KOSS">KOSS</option>
             <option value="KPSC">KPSC</option>
-            <option value="Shooting">Shooting</option>
             <option value="WINK">WINK</option>
         </select>
         <select name="role" onChange={handleChange} required>
