@@ -13,7 +13,7 @@ exports.signUp = (req, res) => {
 
   const newUser = new User(name, studentId, password, role, club);
   users.push(newUser);
-  res.json({ success: true, message: `회원가입 완료: 환영합니다. ${name}, ${studentId}`, data: newUser });
+  res.json({ success: true, message: `회원가입 완료: 환영합니다. ${studentId}, ${club} 동아리 ${name}님!`, data: newUser });
 };
 
 exports.login = (req, res) => {
