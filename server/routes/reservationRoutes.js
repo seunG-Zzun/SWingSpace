@@ -9,4 +9,5 @@ router.get('/list', reservationController.getAllReservations);
 router.get('/by-date', reservationController.getReservationsByDate);
 router.get('/my', reservationController.getReservationsByStudent);
 
+router.get('/by-date', reservationController.getReservationsByDate); //tmp
 module.exports = router;

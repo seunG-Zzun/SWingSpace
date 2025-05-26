@@ -3,17 +3,30 @@ import axios from 'axios';
 import '../css/Reservationpage.css';
 import { useNavigate} from 'react-router-dom';
 import userIcon from '../../assets/user-icon.png';
+import { useEffect } from 'react'; 
+
 function Reservationpage() {
   const navigate = useNavigate();
-
+  
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [selectedTable, setSelectedTable] = useState(null);
   const tableList = [1, 2, 3, 4];
-
+  const [reservationsByDate, setReservationsByDate] = useState([]);
   const todayStr = new Date().toISOString().slice(0, 10);
 
+  useEffect(() => {
+    if (!date) return;
+
+    axios.get(`/reservation/by-date?date=${date}`).then(res => {
+      if (res.data.success) {
+        setReservationsByDate(res.data.data);
+      }
+    }).catch(err => {
+      console.error('예약 데이터 불러오기 실패:', err);
+    });
+  }, [date]);
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
@@ -72,7 +85,20 @@ function Reservationpage() {
       navigate('/mypage');
     }
   };
-  
+  const getTableStatus = (tableId) => {
+    if (!startTime || !endTime) return `테이블 ${tableId}`; 
+    const overlapping = reservationsByDate.find(r =>
+      r.spaceId === tableId &&
+      Number(startTime) < r.endTime &&
+      Number(endTime) > r.startTime
+    );
+
+    if (overlapping) {
+      return `${tableId}번 - ${overlapping.club} 동아리 사용 중`;
+    }
+
+    return `테이블 ${tableId}`;
+};
   return (
     <>
     <button className="mypage-button" onClick={myPageClick}>
@@ -119,7 +145,7 @@ function Reservationpage() {
                 className="table-card"
                 onClick={() => handleTableClick(tableId)}
               >
-                테이블 {tableId}
+                {getTableStatus(tableId)}
               </div>
             ))}
           </div>

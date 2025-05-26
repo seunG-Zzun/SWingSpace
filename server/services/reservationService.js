@@ -85,3 +85,8 @@ exports.getReservationsByStudent = (studentId) => { //tmp
   const myReservations = reservations.filter(r => r.studentId === studentId);
   return createResponse(true, '예약 목록 조회 성공', myReservations);
 };
+
+exports.getReservationsByDate = (date) => { //tmp
+  const matched = reservations.filter(r => r.date === date);
+  return createResponse(true, '예약 정보 조회 성공', matched);
+};
