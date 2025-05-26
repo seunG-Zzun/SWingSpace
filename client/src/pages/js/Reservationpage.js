@@ -51,17 +51,16 @@ function Reservationpage() {
       seatIndex: seatIndex,          // 0부터 시작
       date: date                     // 'YYYY-MM-DD'
     };
-
     try {
       const res = await axios.post('/reservation/create', reservationData);
       if (res.data.success) {
-        alert('예약이 완료되었습니다!');
+        alert('✅ 예약이 완료되었습니다!');
       } else {
-        alert(`예약 실패: ${res.data.message}`);
+        alert(`❌ 예약 실패: ${res.data.message}`);
       }
     } catch (error) {
-      console.error(error);
-      alert('서버 오류로 인해 예약에 실패했습니다.');
+      const message = error.response?.data?.message || '서버 오류가 발생했습니다.';
+      alert(`🚫 예약 실패: ${message}`);
     }
   };
   const myPageClick = () => {

@@ -12,7 +12,7 @@ const spaces = [
 
 const reservations = [];
 exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatIndex, date) => {
-  const id = `${studentId}_${Date.now()}`;
+  const reservationId = `${studentId}_${Date.now()}`;
 
   const currentReservations = reservations.filter(r =>
     r.spaceId === spaceId &&
@@ -20,6 +20,21 @@ exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatI
     r.startTime < endTime &&
     r.endTime > startTime
   );
+
+  const duplicateByUser = reservations.some(r =>
+    r.studentId === studentId &&
+    r.date === date &&
+    r.status === 'reserved' &&
+    r.startTime < endTime &&
+    r.endTime > startTime
+  );
+  if (duplicateByUser) {
+    return createResponse(false, '이미 해당 시간대에 예약한 좌석이 있습니다.');
+  }
+  const seatTaken = currentReservations.some(r=>r.seatIndex === seatIndex);
+  if (seatTaken) {
+    return createResponse(false, `${seatIndex}번 좌석은 이미 예약되었습니다.`)
+  }
 
   const hasOtherClub = currentReservations.some(r => r.club !== club);
   if (hasOtherClub) {
@@ -30,7 +45,7 @@ exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatI
     return createResponse(false, '예약 인원이 가득 찼습니다 (최대 6명).');
   }
 
-  const res = new Reservation(id, studentId, spaceId, startTime, endTime, club);
+  const res = new Reservation(reservationId, studentId, spaceId, startTime, endTime, club, seatIndex, date);
   reservations.push(res);
 
   return createResponse(true, '예약 성공', res);
