@@ -53,7 +53,7 @@ function Reservationpage() {
     };
 
     try {
-      const res = await axios.post('/users/reservations', reservationData);
+      const res = await axios.post('/reservation/create', reservationData);
       if (res.data.success) {
         alert('예약이 완료되었습니다!');
       } else {

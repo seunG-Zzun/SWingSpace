@@ -10,6 +10,8 @@ exports.getAllReservations = (req, res) => {
 exports.createReservation = (req, res) => {
   const { studentId, spaceId, startTime, endTime, club, seatIndex, date } = req.body;
 
+  console.log('[DEBUG] 예약 요청 데이터:', req.body);//debug
+
   if (!studentId || !spaceId || !startTime || !endTime || !club || seatIndex === undefined || !date) {
     return res.status(400).json({ success: false, message: '모든 필드를 입력해주세요.' });
   }
@@ -18,6 +20,7 @@ exports.createReservation = (req, res) => {
     studentId,spaceId,startTime,endTime,club,seatIndex,date
   );
   
+  console.log('[DEBUG] 예약 서비스 결과:', result); //debug
 
   if (!result.success) {
     return res.status(400).json(result);

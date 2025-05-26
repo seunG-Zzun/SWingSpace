@@ -1,5 +1,5 @@
 class Reservation {
-  constructor(studentId, reservationId, spaceId, startTime, endTime, club, seatIndex) {
+  constructor(studentId, reservationId, spaceId, startTime, endTime, club, seatIndex, date) { //date추가
     this.studentId = studentId;
     this.reservationId = reservationId;
     this.spaceId = spaceId;

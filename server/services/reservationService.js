@@ -11,7 +11,7 @@ const spaces = [
 
 
 const reservations = [];
-exports.createReservation = (studentId, spaceId, startTime, endTime, club) => {
+exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatIndex, date) => {
   const id = `${studentId}_${Date.now()}`;
 
   const currentReservations = reservations.filter(r =>
