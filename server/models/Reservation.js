@@ -1,11 +1,13 @@
 class Reservation {
-  constructor(studentId, reservationId, spaceId, startTime, endTime, club) {
+  constructor(studentId, reservationId, spaceId, startTime, endTime, club, seatIndex) {
     this.studentId = studentId;
     this.reservationId = reservationId;
     this.spaceId = spaceId;
     this.startTime = startTime;
     this.endTime = endTime;
     this.club = club;
+    this.seatIndex = seatIndex;
+    this.date = date;
     this.status = "reserved";
   }
   

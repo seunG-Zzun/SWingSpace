@@ -1,24 +1,35 @@
 const reservationService = require('../services/reservationService');
 const TimeUtils = require('../utils/TimeUtils');
 
-exports.createReservation = (req, res) => {
-  const { studentId, spaceId, startTime, endTime, club } = req.body;
+exports.getAllReservations = (req, res) => {
+  const result = reservationService.getAllReservations();
+  res.json(result);
+};
 
-  if (!studentId || !spaceId || !startTime || !endTime || !club) {
+
+exports.createReservation = (req, res) => {
+  const { studentId, spaceId, startTime, endTime, club, seatIndex, date } = req.body;
+
+  if (!studentId || !spaceId || !startTime || !endTime || !club || seatIndex === undefined || !date) {
     return res.status(400).json({ success: false, message: '모든 필드를 입력해주세요.' });
   }
-
-  const result = reservationService.createReservation(studentId, spaceId, startTime, endTime, club);
+  
+  const result = reservationService.createReservation(
+    studentId,spaceId,startTime,endTime,club,seatIndex,date
+  );
+  
 
   if (!result.success) {
     return res.status(400).json(result);
   }
-
   const readableData = {
     ...result.data,
     startTimeStr: TimeUtils.toTimeString(result.data.startTime),
-    endTimeStr: TimeUtils.toTimeString(result.data.endTime)
+    endTimeStr: TimeUtils.toTimeString(result.data.endTime),
+    dateStr: result.data.date,
+    timeRangeStr: TimeUtils.formatFullTime(result.data.date, result.data.startTime, result.data.endTime)
   };
+  
 
   res.status(200).json({
     success: result.success,
@@ -26,6 +37,50 @@ exports.createReservation = (req, res) => {
     data: readableData
   });
 };
+exports.getReservationsByDate = (req, res) => {
+  const { date } = req.query;
+
+  if (!date) {
+    return res.status(400).json({ success: false, message: '날짜를 입력해주세요.' });
+  }
+
+  const result = reservationService.getReservationsByDate(date);
+
+  const readableList = result.data.map(r => ({
+    ...r,
+    timeRangeStr: TimeUtils.formatFullTime(r.date, r.startTime, r.endTime),
+    startTimeStr: TimeUtils.toTimeString(r.startTime),
+    endTimeStr: TimeUtils.toTimeString(r.endTime)
+  }));
+
+   res.status(200).json({
+    success: result.success,
+    message: result.message,
+    data: readableList
+  });
+};
+exports.getReservationsByStudent = (req, res) => {
+  const { studentId } = req.query;
+
+  if (!studentId) {
+    return res.status(400).json({ success: false, message: 'studentId가 필요합니다.' });
+  }
+
+  const result = reservationService.getReservationsByStudent(studentId);
+  const readable = result.data.map(r => ({
+    ...r,
+    timeRangeStr: TimeUtils.formatFullTime(r.date, r.startTime, r.endTime),
+    startTimeStr: TimeUtils.toTimeString(r.startTime),
+    endTimeStr: TimeUtils.toTimeString(r.endTime)
+  }));
+
+  res.status(200).json({
+    success: true,
+    message: result.message,
+    data: readable
+  });
+};
+
 
 
 exports.cancelReservation = (req, res) => {

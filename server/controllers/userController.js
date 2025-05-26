@@ -2,7 +2,7 @@ const users = [];
 const User = require('../models/User');
 
 exports.signUp = (req, res) => {
-  console.log(req.body); //에러 검출용 코드
+  console.log(req.body);
   const { name, studentId, password, role, club } = req.body;
 
 
