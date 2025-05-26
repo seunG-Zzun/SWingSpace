@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../css/Reservationpage.css';
 import { useNavigate} from 'react-router-dom';
 import userIcon from '../../assets/user-icon.png';
+import homeIcon from '../../assets/home-icon.png';
 import { useEffect } from 'react'; 
 
 function Reservationpage() {
@@ -17,15 +18,20 @@ function Reservationpage() {
   const todayStr = new Date().toISOString().slice(0, 10);
 
   useEffect(() => {
-    if (!date) return;
-
-    axios.get(`/reservation/by-date?date=${date}`).then(res => {
-      if (res.data.success) {
-        setReservationsByDate(res.data.data);
+    const fetchReservations = async () => {
+      try {
+        const res = await axios.get(`/reservation/by-date?date=${date}`);
+        if (res.data.success) {
+          setReservationsByDate(res.data.data);
+        }
+      } catch (err) {
+        console.error('예약 데이터 불러오기 실패:', err);
       }
-    }).catch(err => {
-      console.error('예약 데이터 불러오기 실패:', err);
-    });
+    };
+
+    if (date) {
+      fetchReservations();  // ✅ useEffect 내부에서 정의한 함수 사용
+    }
   }, [date]);
 
   const handleDateChange = (e) => {
@@ -84,6 +90,11 @@ function Reservationpage() {
       navigate('/mypage');
     }
   };
+
+  const goHome = () => {
+      navigate('/');
+  };
+
   const getTableStatus = (tableId) => {
     if (!startTime || !endTime) return `테이블 ${tableId}`; 
     const overlapping = reservationsByDate.filter(r =>
@@ -103,6 +114,9 @@ function Reservationpage() {
     <>
     <button className="mypage-button" onClick={myPageClick}>
         <img src= { userIcon } alt="사용자 아이콘" className="icon-img" />마이페이지</button>
+    <button className="home-button" onClick={goHome}>
+        <img src= { homeIcon } alt="사용자 아이콘" className="icon-img" />첫 화면으로</button>
+
     <div className="reservation-wrapper">
       <h2>예약 날짜 선택</h2>
       <input
@@ -125,7 +139,7 @@ function Reservationpage() {
           <option value="" disabled>종료 시간</option>
           {[...Array(14)].map((_, i) => {
             const time = 10 + i;
-            const isDisabled = startTime !== '' && time <= parseInt(startTime);
+            const isDisabled = startTime !== '' && time <= parseInt(startTime) && time > parseInt(startTime) + 6; // 6시간 이상 예약 불가
             return (
               <option key={time} value={time} disabled={isDisabled}>
                 {time}:00

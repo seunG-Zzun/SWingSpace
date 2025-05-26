@@ -21,7 +21,6 @@ function Login() {
       const res = await axios.post('/users/login', form);
 
       if (res.data.success) {
-        // ✅ 로그인 성공 시, 사용자 정보를 localStorage에 저장해야 함
         localStorage.setItem('user', JSON.stringify(res.data.user));
 
         alert(res.data.message);
@@ -37,12 +36,14 @@ function Login() {
 
   return (
     <div className="login-container">
+      <div className="login-box">
       <h2>로그인</h2>
       <form onSubmit={handleSubmit} className="login-form">
         <input name="studentId" placeholder="학번" onChange={handleChange} required />
         <input name="password" type="password" placeholder="비밀번호" onChange={handleChange} required />
         <button type="submit">로그인</button>
       </form>
+        </div>
     </div>
   );
 }

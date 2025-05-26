@@ -1,14 +1,28 @@
 .mypage-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  font-size: 16px;
-  border-radius: 10px;
-  background-color: rgb(236, 236, 236);
+  padding: 8px 16px;
+  background-color: #f0f0f0;
   color: black;
-  border: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.3s ease;
+
+}
+.mypage-button:hover {
+  background-color: #34495e;
+}
+
+.home-button:hover {
+  background-color: #34495e;
+}
+.home-button {
+  color : black;
+  padding: 8px 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: bold;
 }
 
 .icon-img {
