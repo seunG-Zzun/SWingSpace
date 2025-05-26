@@ -81,8 +81,11 @@ exports.extendReservation = (reservationId, now) => {
   return createResponse(true, '예약이 1시간 연장되었습니다.', reservation);
 };
 
-exports.getReservationsByStudent = (studentId) => { //tmp
-  const myReservations = reservations.filter(r => r.studentId === studentId);
+exports.getReservationsByStudent = (studentId, includeCancelled = false) => { //tmp
+  const myReservations = reservations.filter(
+    r => r.studentId === studentId &&
+    (includeCancelled || r.status === 'reserved')
+  );
   return createResponse(true, '예약 목록 조회 성공', myReservations);
 };
 

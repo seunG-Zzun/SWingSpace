@@ -43,7 +43,6 @@ function Reservationpage() {
   };
 
   const handleSeatClick = async (seatIndex) => {
-    console.log('좌석 클릭됨:', seatIndex);  // 확인용 로그
     if (!date || !startTime || !endTime || !selectedTable) {
       alert('날짜, 시간, 테이블을 모두 선택해주세요.');
       return;
@@ -56,13 +55,13 @@ function Reservationpage() {
     }
 
     const reservationData = {
-      studentId: user.studentId,     // e.g., '20221234'
-      spaceId: selectedTable,        // table 번호
+      studentId: user.studentId,
+      spaceId: selectedTable,      
       startTime: Number(startTime),
       endTime: Number(endTime),
-      club: user.club,               // e.g., '배달의민족'
-      seatIndex: seatIndex,          // 0부터 시작
-      date: date                     // 'YYYY-MM-DD'
+      club: user.club,              
+      seatIndex: seatIndex,         
+      date: date                   
     };
     try {
       const res = await axios.post('/reservation/create', reservationData);
@@ -87,14 +86,15 @@ function Reservationpage() {
   };
   const getTableStatus = (tableId) => {
     if (!startTime || !endTime) return `테이블 ${tableId}`; 
-    const overlapping = reservationsByDate.find(r =>
+    const overlapping = reservationsByDate.filter(r =>
       r.spaceId === tableId &&
+      r.status === 'reserved' &&
       Number(startTime) < r.endTime &&
       Number(endTime) > r.startTime
     );
 
-    if (overlapping) {
-      return `${tableId}번 - ${overlapping.club} 동아리 사용 중`;
+    if (overlapping.length > 0) {
+      return `${tableId}번 - ${overlapping[0].club} 동아리 사용 중`;
     }
 
     return `테이블 ${tableId}`;
