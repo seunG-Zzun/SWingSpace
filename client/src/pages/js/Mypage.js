@@ -24,14 +24,7 @@ function MyPage() {
   const loadReservations = async (studentId) => {
     try {
       const res = await axios.get(`/reservation/my?studentId=${studentId}&includeCancelled=true`);
-      
-      const sorted = res.data.data.sort((a, b) => {
-        const timeA = new Date(`${a.date}T${a.startTime}:00`);
-        const timeB = new Date(`${b.date}T${b.startTime}:00`);
-        return timeB - timeA; // 최신순 (내림차순)
-      });
-
-      setReservations(sorted);
+      setReservations(res.data.data); 
     } catch (err) {
       console.error(err);
       alert('예약 정보를 불러오는 데 실패했습니다.');
@@ -39,22 +32,29 @@ function MyPage() {
   };
 
   const cancelReservation = async (reservationId) => {
+    let msg = '';
     try {
       const res = await axios.post('/reservation/cancel', { reservationId });
+      msg = res.data.message;
       alert(res.data.message);
       loadReservations(studentId);
     } catch (err) {
-      alert('예약 취소 실패');
+      const msg = err.response?.data?.message || '알 수 없는 오류';
+      alert(`예약 취소 실패: ${msg}`);
+      
     }
   };
 
   const extendReservation = async (reservationId) => {
+    let msg = '';
     try {
       const res = await axios.post('/reservation/extend', { reservationId });
+      msg = res.data.message;
       alert(res.data.message);
       loadReservations(studentId);
     } catch (err) {
-      alert('예약 연장 실패');
+      const msg = err.response?.data?.message || '알 수 없는 오류';
+      alert(`예약 연장 실패: ${msg}`);
     }
   };
   const reservationClick = () => {navigate('/reservation');};  
@@ -73,17 +73,25 @@ function MyPage() {
               <p>📅 {r.date}</p>
               <p>🪑 테이블 {r.spaceId}번 / 좌석 {r.seatIndex + 1}번</p>
               <p>🕒 {r.startTime}:00 ~ {r.endTime}:00</p>
-              {r.status === 'reserved' && (
-                <>
-                  <button onClick={() => cancelReservation(r.reservationId)}>취소</button>
-                  <button onClick={() => extendReservation(r.reservationId)}>연장</button>
-                </>
-              )}
-              {r.status === 'cancelled' && (
-                <>
-                  <p> ✖️취소됨</p>
-                </>
-              ) }
+                {r.status === 'reserved' && (
+                  <div className="action-buttons">
+                    <button
+                      className="action-button cancel-button"
+                      onClick={() => cancelReservation(r.reservationId)}
+                    >
+                      취소
+                    </button>
+                    <button
+                      className="action-button extend-button"
+                      onClick={() => extendReservation(r.reservationId)}
+                    >
+                      연장
+                    </button>
+                  </div>
+                )}
+                {r.status === 'cancelled' && (
+                  <p className="cancelled-text">✖️ 취소됨</p>
+                )}
             </div>
           ))}
         </div>

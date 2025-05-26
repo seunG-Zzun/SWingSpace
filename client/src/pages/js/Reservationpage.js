@@ -15,24 +15,30 @@ function Reservationpage() {
   const [selectedTable, setSelectedTable] = useState(null);
   const tableList = [1, 2, 3, 4];
   const [reservationsByDate, setReservationsByDate] = useState([]);
-  const todayStr = new Date().toISOString().slice(0, 10);
+
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`; // 오늘 날짜 정확히 계산 위해
+  
+  const loadReservationsByDate = async () => {
+    try {
+      const res = await axios.get(`/reservation/by-date?date=${date}`);
+      if (res.data.success) {
+        setReservationsByDate(res.data.data);
+      }
+    } catch (err) {
+      console.error('예약 데이터 불러오기 실패:', err);
+    }
+  };
 
   useEffect(() => {
-    const fetchReservations = async () => {
-      try {
-        const res = await axios.get(`/reservation/by-date?date=${date}`);
-        if (res.data.success) {
-          setReservationsByDate(res.data.data);
-        }
-      } catch (err) {
-        console.error('예약 데이터 불러오기 실패:', err);
-      }
-    };
-
     if (date) {
-      fetchReservations();  // ✅ useEffect 내부에서 정의한 함수 사용
+      loadReservationsByDate();
     }
   }, [date]);
+
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
@@ -73,6 +79,7 @@ function Reservationpage() {
       const res = await axios.post('/reservation/create', reservationData);
       if (res.data.success) {
         alert('✅ 예약이 완료되었습니다!');
+        await loadReservationsByDate();
       } else {
         alert(`❌ 예약 실패: ${res.data.message}`);
       }
@@ -139,7 +146,7 @@ function Reservationpage() {
           <option value="" disabled>종료 시간</option>
           {[...Array(14)].map((_, i) => {
             const time = 10 + i;
-            const isDisabled = startTime !== '' && time <= parseInt(startTime) && time > parseInt(startTime) + 6; // 6시간 이상 예약 불가
+            const isDisabled = startTime !== '' && (time <= parseInt(startTime) || time > parseInt(startTime) + 6); // 6시간 이상 예약 불가
             return (
               <option key={time} value={time} disabled={isDisabled}>
                 {time}:00

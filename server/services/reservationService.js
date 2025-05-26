@@ -33,7 +33,7 @@ exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatI
   }
   const seatTaken = currentReservations.some(r=>r.seatIndex === seatIndex);
   if (seatTaken) {
-    return createResponse(false, `${seatIndex}번 좌석은 이미 예약되었습니다.`)
+    return createResponse(false, `${seatIndex+1}번 좌석은 이미 예약되었습니다.`)
   }
 
   const hasOtherClub = currentReservations.some(r => r.club !== club);
@@ -76,7 +76,6 @@ exports.extendReservation = (reservationId, now) => {
   if (!reservation.canBeExtended(now, isAvailable)) {
     return createResponse(false, '연장 조건이 충족되지 않습니다.');
   }
-
   reservation.extend();
   return createResponse(true, '예약이 1시간 연장되었습니다.', reservation);
 };
