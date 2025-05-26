@@ -1,7 +1,8 @@
 .carousel-container {
   overflow: hidden;
   width: 100%;
-  background: rgb(177, 228, 255);
+  /* background: rgb(177, 228, 255); */
+  background: rgb(255, 234, 217);
 }
 
 .carousel-track {
