@@ -1,12 +1,4 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-image: url('../../assets/container_background.png'); /* 경로는 CSS 기준 상대경로 */
-  background-size: cover;         /* 화면을 꽉 채움 */
-  background-position: center;    /* 가운데 정렬 */
-  background-repeat: no-repeat;   /* 반복 안 함 */
-  min-height: 100vh;              /* 세로 전체 채움 */
-}
+
 .reservation-wrapper {
   max-width: 600px;
   margin: 80px auto;
