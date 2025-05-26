@@ -42,6 +42,8 @@ function MyPage() {
               <p>📅 {r.date}</p>
               <p>🪑 테이블 {r.spaceId}번 / 좌석 {r.seatIndex + 1}번</p>
               <p>🕒 {r.startTime}:00 ~ {r.endTime}:00</p>
+              {/* <button onClick={() => handleCancel(r.reservationId)}>취소</button>
+              <button onClick={() => handleExtend(r.reservationId)}>연장</button> */}
             </div>
           ))}
         </div>
