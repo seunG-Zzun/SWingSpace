@@ -3,6 +3,8 @@ import Home from './Home';
 import Signup from './Signup';
 import Login from './Login';
 import Reservationpage from './Reservationpage';
+import Mypage from './Mypage';
+
 function App() {
   return (
     <BrowserRouter>
@@ -11,6 +13,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reservation" element={<Reservationpage />} />
+        <Route path="/mypage" element={<Mypage />} /> 
       </Routes>
     </BrowserRouter>
   );

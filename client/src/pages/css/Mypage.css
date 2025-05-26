@@ -1,0 +1,23 @@
+.mypage-wrapper {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: 'Pretendard', sans-serif;
+}
+
+.reservation-list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reservation-card {
+  background-color: #f6f6f6;
+  padding: 16px;
+  border-radius: 10px;
+  line-height: 1.6;
+}

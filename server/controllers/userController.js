@@ -29,7 +29,7 @@ exports.login = (req, res) => {
     return res.status(403).json({ success: false, message: '이 사용자는 정지되었습니다.' });
   }
 
-  return res.json({ success: true, message: '로그인 성공!' });
+  return res.json({ success: true, message: '로그인 성공!',user:user });
 };
 
 

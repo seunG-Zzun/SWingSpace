@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import '../css/Reservationpage.css';
+import { useNavigate} from 'react-router-dom';
 
 function Reservationpage() {
+  const navigate = useNavigate();
+
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
@@ -10,6 +13,7 @@ function Reservationpage() {
   const tableList = [1, 2, 3, 4];
 
   const todayStr = new Date().toISOString().slice(0, 10);
+
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
@@ -29,8 +33,19 @@ function Reservationpage() {
     alert(`${selectedTable}번 테이블 ${seatIndex + 1}번 좌석 예약`);
     // axios.post(...) 예약 요청 가능
   };
-
+  const myPageClick = () => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+    } else {
+      navigate('/mypage');
+    }
+  };
+  
   return (
+    <>
+    <button className="mypage-button" onClick={myPageClick}>마이페이지</button>
     <div className="reservation-wrapper">
       <h2>예약 날짜 선택</h2>
       <input
@@ -39,7 +54,7 @@ function Reservationpage() {
         value={date}
         onChange={handleDateChange}
       />
-
+      
       <div className="time-select">
         <select onChange={handleStartTimeChange} value={startTime}>
           <option value="" disabled>시작 시간</option>
@@ -97,6 +112,7 @@ function Reservationpage() {
         </>
       )}
     </div>
+  </>
   );
 }
 

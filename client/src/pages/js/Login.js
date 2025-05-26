@@ -19,12 +19,21 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post('/users/login', form);
-      alert(res.data.message);
-      navigate('/reservation');
+
+      if (res.data.success) {
+        // ✅ 로그인 성공 시, 사용자 정보를 localStorage에 저장해야 함
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+
+        alert(res.data.message);
+        navigate('/reservation');
+      } else {
+        alert(res.data.message);
+      }
     } catch (err) {
       alert(err.response?.data?.message || '로그인 실패');
     }
   };
+
 
   return (
     <div className="login-container">
