@@ -21,3 +21,74 @@
   border-radius: 10px;
   line-height: 1.6;
 }
+
+.reservation-list {
+  max-height: 400px; /* 또는 원하는 높이 */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+
+/* 버튼 묶음 */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* 공통 버튼 스타일 */
+.action-button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* 취소 버튼 */
+.cancel-button {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+}
+.cancel-button:hover {
+  background-color: #d0d7dc;
+}
+
+/* 연장 버튼 */
+.extend-button {
+  background-color: #3498db;
+  color: white;
+}
+.extend-button:hover {
+  background-color: #2980b9;
+}
+
+/* 취소된 텍스트 */
+.cancelled-text {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #c0392b;
+}
+
+.reservation-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px;
+  background-color: rgb(255, 163, 102);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.reservation-button:hover {
+  background-color: rgb(255, 137, 72)
+}

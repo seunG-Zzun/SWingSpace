@@ -1,8 +1,8 @@
 .carousel-container {
   overflow: hidden;
   width: 100%;
-  /* background: rgb(177, 228, 255); */
   background: rgb(255, 234, 217);
+  overflow: hidden; 
 }
 
 .carousel-track {
@@ -25,7 +25,7 @@
     transform: translateX(-15%);
   }
   50% {
-    transform: translateX(-5%);
+    transform: translateX(-10%);
   }
   75% {
     transform: translateX(-15%);

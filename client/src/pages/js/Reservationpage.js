@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../css/Reservationpage.css';
 import { useNavigate} from 'react-router-dom';
 import userIcon from '../../assets/user-icon.png';
+import homeIcon from '../../assets/home-icon.png';
 import { useEffect } from 'react'; 
 
 function Reservationpage() {
@@ -14,19 +15,30 @@ function Reservationpage() {
   const [selectedTable, setSelectedTable] = useState(null);
   const tableList = [1, 2, 3, 4];
   const [reservationsByDate, setReservationsByDate] = useState([]);
-  const todayStr = new Date().toISOString().slice(0, 10);
 
-  useEffect(() => {
-    if (!date) return;
-
-    axios.get(`/reservation/by-date?date=${date}`).then(res => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const todayStr = `${yyyy}-${mm}-${dd}`; // 오늘 날짜 정확히 계산 위해
+  
+  const loadReservationsByDate = async () => {
+    try {
+      const res = await axios.get(`/reservation/by-date?date=${date}`);
       if (res.data.success) {
         setReservationsByDate(res.data.data);
       }
-    }).catch(err => {
+    } catch (err) {
       console.error('예약 데이터 불러오기 실패:', err);
-    });
+    }
+  };
+
+  useEffect(() => {
+    if (date) {
+      loadReservationsByDate();
+    }
   }, [date]);
+
 
   const handleDateChange = (e) => {
     setDate(e.target.value);
@@ -43,7 +55,6 @@ function Reservationpage() {
   };
 
   const handleSeatClick = async (seatIndex) => {
-    console.log('좌석 클릭됨:', seatIndex);  // 확인용 로그
     if (!date || !startTime || !endTime || !selectedTable) {
       alert('날짜, 시간, 테이블을 모두 선택해주세요.');
       return;
@@ -56,18 +67,19 @@ function Reservationpage() {
     }
 
     const reservationData = {
-      studentId: user.studentId,     // e.g., '20221234'
-      spaceId: selectedTable,        // table 번호
+      studentId: user.studentId,
+      spaceId: selectedTable,      
       startTime: Number(startTime),
       endTime: Number(endTime),
-      club: user.club,               // e.g., '배달의민족'
-      seatIndex: seatIndex,          // 0부터 시작
-      date: date                     // 'YYYY-MM-DD'
+      club: user.club,              
+      seatIndex: seatIndex,         
+      date: date                   
     };
     try {
       const res = await axios.post('/reservation/create', reservationData);
       if (res.data.success) {
         alert('✅ 예약이 완료되었습니다!');
+        await loadReservationsByDate();
       } else {
         alert(`❌ 예약 실패: ${res.data.message}`);
       }
@@ -85,24 +97,35 @@ function Reservationpage() {
       navigate('/mypage');
     }
   };
+
+  const goHome = () => {
+      navigate('/');
+  };
+
   const getTableStatus = (tableId) => {
     if (!startTime || !endTime) return `테이블 ${tableId}`; 
-    const overlapping = reservationsByDate.find(r =>
+    const overlapping = reservationsByDate.filter(r =>
       r.spaceId === tableId &&
+      r.status === 'reserved' &&
       Number(startTime) < r.endTime &&
       Number(endTime) > r.startTime
     );
 
-    if (overlapping) {
-      return `${tableId}번 - ${overlapping.club} 동아리 사용 중`;
+    if (overlapping.length > 0) {
+      return `${tableId}번 - ${overlapping[0].club} 동아리 사용 중`;
     }
 
     return `테이블 ${tableId}`;
 };
   return (
     <>
+    <div className="login-groups">
     <button className="mypage-button" onClick={myPageClick}>
-        <img src= { userIcon } alt="사용자 아이콘" className="icon-img" />마이페이지</button>
+        <img src= { userIcon } alt="사용자 아이콘" className="icon-img" /> MyPage</button>
+    <button className="home-button" onClick={goHome}>
+        <img src= { homeIcon } alt="사용자 아이콘" className="icon-img" /> Home</button>
+    </div>
+
     <div className="reservation-wrapper">
       <h2>예약 날짜 선택</h2>
       <input
@@ -117,7 +140,10 @@ function Reservationpage() {
           <option value="" disabled>시작 시간</option>
           {[...Array(14)].map((_, i) => {
             const time = 9 + i;
-            return <option key={time} value={time}>{time}:00</option>;
+            const currentHour = new Date().getHours();
+            const isToday = date === todayStr;
+            const isDisabled= isToday && time <= currentHour;
+            return (<option key={time} value={time} disabled={isDisabled}> {time}:00 </option>);
           })}
         </select>
 
@@ -125,7 +151,7 @@ function Reservationpage() {
           <option value="" disabled>종료 시간</option>
           {[...Array(14)].map((_, i) => {
             const time = 10 + i;
-            const isDisabled = startTime !== '' && time <= parseInt(startTime);
+            const isDisabled = startTime !== '' && (time <= parseInt(startTime) || time > parseInt(startTime) + 6); // 6시간 이상 예약 불가
             return (
               <option key={time} value={time} disabled={isDisabled}>
                 {time}:00
@@ -154,15 +180,25 @@ function Reservationpage() {
             <div className="seat-section">
               <h4>{selectedTable}번 테이블 좌석</h4>
               <div className="seat-grid">
-                {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="seat-box"
-                    onClick={() => handleSeatClick(i)}
-                  >
-                    {i + 1}번
-                  </div>
-                ))}
+                {[...Array(6)].map((_, i) => {
+                  const isReserved = reservationsByDate.some(r =>
+                    r.spaceId === selectedTable &&
+                    r.seatIndex === i &&
+                    r.status === 'reserved' &&
+                    Number(startTime) < r.endTime &&
+                    Number(endTime) > r.startTime
+                  );
+
+                  return (
+                    <div
+                      key={i}
+                      className={`seat-box ${isReserved ? 'reserved' : ''}`}
+                      onClick={() => !isReserved && handleSeatClick(i)}
+                    >
+                      {i + 1}번
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

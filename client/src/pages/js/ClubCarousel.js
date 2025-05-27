@@ -12,7 +12,6 @@ const logoList = [club1, club2, club3, club4, club5, club6, club7];
 
 function ClubCarousel() {
   const extendedLogos = [...logoList, ...logoList];
-  // const extendedLogos = [...logoList];
   return (
     <div className="carousel-container">
       <div className="carousel-track">

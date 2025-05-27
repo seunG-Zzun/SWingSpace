@@ -32,23 +32,25 @@ function Signup() {
 
   return (
     <div className="signup-container">
+      <div className="signup-box">
+
       <h2>회원가입</h2>
       <form onSubmit={handleSubmit} className="signup-form">
         <input name="name" placeholder="이름" onChange={handleChange} required />
         <input name="studentId" placeholder="학번" onChange={handleChange} required />
         <input name="password" type="password" placeholder="비밀번호" onChange={handleChange} required />
         <select name="club" onChange={handleChange} required>
-            <option value="">--동아리 선택--</option>
+            <option value="">---------------동아리 선택---------------</option>
             <option value="AIM">AIM</option>
             <option value="DOUM">DO, UM</option>
+            <option value="FOSCAR">FOSCAR</option>
             <option value="KOBOT">KOBOT</option>
             <option value="KOSS">KOSS</option>
             <option value="KPSC">KPSC</option>
-            <option value="Shooting">Shooting</option>
             <option value="WINK">WINK</option>
         </select>
         <select name="role" onChange={handleChange} required>
-            <option value="">--선택하세요--</option>
+            <option value="">----------------선택하세요---------------</option>
             <option value="user">동아리원</option>
             <option value="admin">동아리장</option>
         </select>
@@ -56,6 +58,7 @@ function Signup() {
         <button type="submit">가입하기</button>
       </form>
     </div>
+      </div>
   );
 }
 

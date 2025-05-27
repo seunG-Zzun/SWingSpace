@@ -1,14 +1,24 @@
-.mypage-button {
+.login-group{
+  position: absolute;
+  top: 20px;
+  right: 20px;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.mypage-button, .home-button  {
   padding: 10px 16px;
-  font-size: 16px;
-  border-radius: 10px;
-  background-color: rgb(236, 236, 236);
-  color: black;
+  background-color: rgb(255, 163, 102);
+  color: #fff;
   border: none;
+  border-radius: 6px;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.3s ease;
+
+}
+.mypage-button:hover, .home-button:hover {
+  background-color: rgb(255, 137, 72)
 }
 
 .icon-img {
@@ -106,6 +116,11 @@ select:hover {
   background-color: #f0f0f0;
 }
 
+.seat-box.reserved {
+  background-color: #bbb;
+  color: white;
+  cursor: not-allowed;
+}
 /* 예약된 좌석 스타일 (JS에서 reserved 시 적용 가능) */
 .seat-box.reserved {
   background-color: #bbb;

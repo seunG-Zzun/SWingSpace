@@ -63,10 +63,10 @@ exports.getReservationsByDate = (req, res) => {
   });
 };
 exports.getReservationsByStudent = (req, res) => {
-  const { studentId } = req.query;
+  const { studentId, includeCancelled } = req.query;
   console.log('[DEBUG] 요청된 studentId:', studentId);
 
-  const result = reservationService.getReservationsByStudent(studentId);
+  const result = reservationService.getReservationsByStudent(studentId, includeCancelled === 'true');
   console.log('[DEBUG] 서비스 결과:', result);
 
   if (!result || !result.success) {
