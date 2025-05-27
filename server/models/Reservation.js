@@ -8,6 +8,7 @@ class Reservation {
     this.club = club;
     this.seatIndex = seatIndex;
     this.date = date;
+    this.isExtended = false;
     this.status = "reserved";
   }
   
