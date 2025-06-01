@@ -1,112 +1,100 @@
 const reservationService = require('../services/reservationService');
 const TimeUtils = require('../utils/TimeUtils');
 
-exports.getAllReservations = (req, res) => {
-  const result = reservationService.getAllReservations();
-  res.json(result);
+const formatReservation = (r) => ({
+  ...r.toObject(),
+  timeRangeStr: TimeUtils.formatFullTime(r.date, r.startTime, r.endTime),
+  startTimeStr: TimeUtils.toTimeString(r.startTime),
+  endTimeStr: TimeUtils.toTimeString(r.endTime)
+});
+
+exports.getAllReservations = async (req, res) => {
+  try {
+    const result = await reservationService.getAllReservations();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
+  }
 };
 
 
-exports.createReservation = (req, res) => {
-  const { studentId, spaceId, startTime, endTime, club, seatIndex, date } = req.body;
-
-  console.log('[DEBUG] 예약 요청 데이터:', req.body);
+exports.createReservation = async (req, res) => {
+  const { spaceId, startTime, endTime, club, seatIndex, date } = req.body;
+  const studentId = req.user.studentId; 
 
   if (!studentId || !spaceId || !startTime || !endTime || !club || seatIndex === undefined || !date) {
     return res.status(400).json({ success: false, message: '모든 필드를 입력해주세요.' });
   }
-  
-  const result = reservationService.createReservation(
-    studentId,spaceId,startTime,endTime,club,seatIndex,date
-  );
-  
-  console.log('[DEBUG] 예약 서비스 결과:', result); 
 
-  if (!result.success) {
-    return res.status(400).json(result);
+  try {
+    const result = await reservationService.createReservation(studentId, spaceId, startTime, endTime, club, seatIndex, date);
+    if (!result.success) return res.status(400).json(result);
+
+    const readableData = formatReservation(result.data);
+    res.status(200).json({ success: true, message: result.message, data: readableData });
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }
-  const readableData = {
-    ...result.data,
-    startTimeStr: TimeUtils.toTimeString(result.data.startTime),
-    endTimeStr: TimeUtils.toTimeString(result.data.endTime),
-    dateStr: result.data.date,
-    timeRangeStr: TimeUtils.formatFullTime(result.data.date, result.data.startTime, result.data.endTime)
-  };
-  
-
-  res.status(200).json({
-    success: result.success,
-    message: result.message,
-    data: readableData
-  });
 };
-exports.getReservationsByDate = (req, res) => {
+
+exports.getReservationsByDate = async (req, res) => {
   const { date } = req.query;
 
   if (!date) {
     return res.status(400).json({ success: false, message: '날짜를 입력해주세요.' });
   }
 
-  const result = reservationService.getReservationsByDate(date);
-
-  const readableList = result.data.map(r => ({
-    ...r,
-    timeRangeStr: TimeUtils.formatFullTime(r.date, r.startTime, r.endTime),
-    startTimeStr: TimeUtils.toTimeString(r.startTime),
-    endTimeStr: TimeUtils.toTimeString(r.endTime)
-  }));
-
-   res.status(200).json({
-    success: result.success,
-    message: result.message,
-    data: readableList
-  });
-};
-exports.getReservationsByStudent = (req, res) => {
-  const { studentId, includeCancelled } = req.query;
-  console.log('[DEBUG] 요청된 studentId:', studentId);
-
-  const result = reservationService.getReservationsByStudent(studentId, includeCancelled === 'true');
-  console.log('[DEBUG] 서비스 결과:', result);
-
-  if (!result || !result.success) {
-    return res.status(500).json({ success: false, message: '예약 조회 실패' });
+  try {
+    const result = await reservationService.getReservationsByDate(date);
+    const readableList = result.data.map(formatReservation);
+    res.status(200).json({ success: true, message: result.message, data: readableList });
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }
-
-  const readable = result.data.map(r => ({
-    ...r,
-    timeRangeStr: TimeUtils.formatFullTime(r.date, r.startTime, r.endTime),
-    startTimeStr: TimeUtils.toTimeString(r.startTime),
-    endTimeStr: TimeUtils.toTimeString(r.endTime)
-  }));
-
-  return res.status(200).json({
-    success: true,
-    message: result.message,
-    data: readable
-  });
 };
 
+exports.getReservationsByStudent = async (req, res) => {
+  const studentId = req.user.studentId;
+  const includeCancelled = req.query.includeCancelled === 'true';
 
+  try {
+    const result = await reservationService.getReservationsByStudent(studentId, includeCancelled);
+    if (!result.success) return res.status(500).json({ success: false, message: '예약 조회 실패' });
 
-
-exports.cancelReservation = (req, res) => {
-  const { reservationId } = req.body;
-  const result = reservationService.cancelReservation(reservationId);
-  res.status(result.success ? 200 : 400).json(result);
+    const readable = result.data.map(formatReservation);
+    return res.status(200).json({ success: true, message: result.message, data: readable });
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
+  }
 };
 
-exports.extendReservation = (req, res) => {
-  const { reservationId } = req.body;
-
-  const now = TimeUtils.getNowDecimal();
-
-  const result = reservationService.extendReservation(reservationId, now);
-  res.status(result.success ? 200 : 400).json(result);
+exports.cancelReservation = async (req, res) => {
+  try {
+    const { reservationId } = req.params;
+    const result = await reservationService.cancelReservation(reservationId);
+    res.status(result.success ? 200 : 400).json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
+  }
 };
 
-exports.returnReservation = (req, res) => {
-  const {reservationId} = req.body;
-  const result = reservationService.returnReseravtion(reservationId);
-  res.status(result.success ? 200 : 400).json(result);
-}
+exports.extendReservation = async (req, res) => {
+  try {
+    const { reservationId } = req.body;
+    const now = TimeUtils.getNowDecimal();
+    const result = await reservationService.extendReservation(reservationId, now);
+    res.status(result.success ? 200 : 400).json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
+  }
+};
+
+exports.returnReservation = async (req, res) => {
+  try {
+    const { reservationId } = req.body;
+    const result = await reservationService.returnReservation(reservationId);
+    res.status(result.success ? 200 : 400).json(result);
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
+  }
+};

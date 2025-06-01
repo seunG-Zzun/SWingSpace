@@ -1,40 +1,51 @@
-class Reservation {
-  constructor(reservationId, studentId, spaceId, startTime, endTime, club, seatIndex, date) { //date추가
-    this.studentId = studentId;
-    this.reservationId = reservationId;
-    this.spaceId = spaceId;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.club = club;
-    this.seatIndex = seatIndex;
-    this.date = date;
-    this.isExtended = false;
-    this.returned = false;
-    this.returnedAt = null;
+const mongoose = require('mongoose');
 
-    this.status = "reserved";
-  }
-  
-    extend() {
-      this.endTime += 1.0;
-    }
-  
-    cancel() {
-      this.status = "cancelled";
-    }
-  
+const reservationSchema = new mongoose.Schema({
+  reservationId: { type: String, required: true, unique: true },
+  studentId: { type: String, required: true },
+  spaceId: { type: Number, required: true },
+  startTime: { type: Number, required: true },
+  endTime: { type: Number, required: true },
+  club: { type: String, required: true },
+  seatIndex: { type: Number, required: true },
+  date: { type: String, required: true }, 
 
-    returnReservation() {
-      this.status = "returned";
-      this.returned = true;
-      this.returnedAt = TimeUtils.getNowDecimal();
-    }
-    
-  
-    canBeExtended(now, isAvailable) {
-      return now >= this.endTime - 0.5 && isAvailable;
-    }
+  isExtended: { type: Boolean, default: false },
+  returned: { type: Boolean, default: false },
+  returnedAt: { type: Number, default: null },
+
+  status: {
+    type: String,
+    enum: ['reserved', 'cancelled', 'returned'],
+    default: 'reserved'
+  },
+  returnWarningGiven: { type: Boolean, default: false }
+});
+
+reservationSchema.methods.extend = function () {
+  if (!this.isExtended) {
+    this.endTime += 1.0; // 1시간 연장
+    this.isExtended = true;
   }
-  
-  module.exports = Reservation;
-  
+};
+
+reservationSchema.methods.cancel = function () {
+  this.status = 'cancelled';
+};
+
+reservationSchema.methods.returnReservation = function (nowDecimal) {
+  this.status = 'returned';
+  this.returned = true;
+  this.returnedAt = nowDecimal;
+};
+
+reservationSchema.methods.canBeExtended = function (nowDecimal, isAvailable) {
+  return (
+    nowDecimal >= this.endTime - 0.5 &&
+    !this.isExtended &&
+    isAvailable &&
+    this.status === 'reserved'
+  );
+};
+
+module.exports = mongoose.model('Reservation', reservationSchema);
