@@ -1,0 +1,147 @@
+.login-groups{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.mypage-button, .home-button  {
+  padding: 10px 16px;
+  background-color: rgb(255, 163, 102);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.mypage-button:hover, .home-button:hover {
+  background-color: rgb(255, 137, 72)
+}
+.admin-button  {
+  padding: 10px 16px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.top-right-buttons {
+  position: absolute;
+  top: 0px;
+  right: 20px;
+}
+
+.admin-button:hover {
+  background-color: #666;
+}
+.icon-img {
+  width: 20px;
+  height: 20px;
+}
+.reservation-wrapper {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 32px;
+  border-radius: 16px;
+  background-color: rgb(233, 246, 194);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Pretendard', sans-serif;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+input[type="date"],
+select {
+  padding: 12px 16px;
+  font-size: 16px;
+  margin: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  width: 160px;
+  background-color: #fff;
+}
+
+input[type="date"]:hover,
+select:hover {
+  border-color: #888;
+}
+
+.time-select {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.table-grid {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.table-card {
+  background-color: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+}
+.table-card:hover {
+  background-color: #f0f0f0;
+}
+
+/* 선택된 테이블 아래 좌석 선택 영역 */
+.seat-section {
+  margin-top: 40px;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3열 */
+  gap: 12px;
+  justify-items: center;
+  margin-top: 16px;
+}
+/* 좌석 하나 */
+.seat-box {
+  width: 120px;
+  height: 60px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+.seat-box:hover {
+  background-color: #f0f0f0;
+}
+
+.seat-box.reserved {
+  background-color: #bbb;
+  color: white;
+  cursor: not-allowed;
+}
+/* 예약된 좌석 스타일 (JS에서 reserved 시 적용 가능) */
+.seat-box.reserved {
+  background-color: #bbb;
+  cursor: not-allowed;
+  color: #fff;
+}
