@@ -11,13 +11,11 @@ const isAdmin = (req, res, next) => {
   }
   next();
 };
-//인증증
+
 router.use(authMiddleware);
 
-//관리자 권한 확인
 router.use(isAdmin);
 
-//모든 라우트: 인증 + 관리자만 통과
 router.get('/dashboard', adminController.dashboard);
 router.get('/users', adminController.getAllUsers);
 router.post('/users/:studentId/warning', adminController.addWarning);

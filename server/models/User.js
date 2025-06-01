@@ -33,7 +33,7 @@ userSchema.methods.addWarning = function () {
 };
 
 
-userSchema.methods.isBanned = function () {
+userSchema.methods.checkifBanned = function () {
   return this.warningCount >= 4;
 };
 

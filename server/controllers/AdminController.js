@@ -30,7 +30,7 @@ exports.addWarning = async (req, res) => {
       );
     }
 
-    res.json({ success: true, message: '경고 부여 완료', data: user });
+    res.json({ success: true, message: '경고 1회 부여 완료', data: user });
   } catch (err) {
     res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }
@@ -83,23 +83,8 @@ exports.dashboard = async (req, res) => {
     });
 
     for (const r of overdueReservations) {
-      const user = await User.findOne({ studentId: r.studentId });
-      if (user) {
-        r.returnWarningGiven = true;
-        await r.save();
-
-        user.warningCount += 1;
-        await user.save();
-
-        if (user.warningCount >= 4) {
-          await User.updateOne({ studentId: user.studentId }, { isBanned: true });
-
-          await Reservation.updateMany(
-            { studentId: user.studentId, date: { $gte: today }, status: 'reserved' },
-            { $set: { status: 'cancelled' } }
-          );
-        }
-      }
+      r.returnWarningGiven = true;
+      await r.save();
     }
 
     const sameClubUsers = await User.find({ club: admin.club, role: { $ne: 'admin' } });
@@ -110,7 +95,8 @@ exports.dashboard = async (req, res) => {
         status: 'reserved',
         returned: false,
         date: today,
-        endTime: { $lt: now - 1 / 6 }
+        endTime: { $lt: now - 1 / 6 },
+        returnWarningGiven: true
       });
 
       return {
