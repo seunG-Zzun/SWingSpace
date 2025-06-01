@@ -110,10 +110,19 @@ exports.extendReservation = (reservationId, nowDecimal) => {
 exports.returnReservation = (reservationId) => {
   const reservation = reservations.find(r => r.reservationId === reservationId);
   if (!reservation) return createResponse(false, '예약을 찾을 수 없습니다.');
-  if (reservation.status!=='reserved') return createResponse(false, '이미 처리된 예약입니다.');
+  if (reservation.status !== 'reserved') return createResponse(false, '이미 처리된 예약입니다.');
+
+  const now = TimeUtils.getNowDecimal();
+  const today = TimeUtils.getTodayDate();
+
+  if (reservation.date === today && now < reservation.startTime) {
+    return createResponse(false, '예약 시작 시간 이전에는 반납할 수 없습니다.');
+  }
+
   reservation.returnReservation(); 
   return createResponse(true, '반납 완료', reservation);
-}
+};
+
 
 
 exports.getOverdueReservationsByClub = (adminClub, now) => {
@@ -150,4 +159,4 @@ exports.getAllReservations = () => {
 }
 
 
-expor
+

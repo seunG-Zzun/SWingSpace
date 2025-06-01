@@ -8,6 +8,8 @@ router.post('/extend', reservationController.extendReservation);
 router.get('/list', reservationController.getAllReservations);
 router.get('/by-date', reservationController.getReservationsByDate);
 router.get('/my', reservationController.getReservationsByStudent);
-router.post('/return', reservationController.returnReservation);
 router.get('/by-date', reservationController.getReservationsByDate);
+router.post('/return', reservationController.returnReservation);
+
+
 module.exports = router;

@@ -105,8 +105,8 @@ exports.extendReservation = (req, res) => {
   res.status(result.success ? 200 : 400).json(result);
 };
 
-exports.retuenReservation = (req, res) => {
+exports.returnReservation = (req, res) => {
   const {reservationId} = req.body;
   const result = reservationService.returnReseravtion(reservationId);
-  res.stastus(result.sucess ? 200 : 400).json(result);
+  res.status(result.success ? 200 : 400).json(result);
 }
