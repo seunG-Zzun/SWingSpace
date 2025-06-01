@@ -67,15 +67,29 @@ exports.cancelReservation = async (reservationId) => {
   const now = TimeUtils.getNowDecimal();
   const today = TimeUtils.getTodayDate();
 
+  // ✅ 디버깅용 로그
+  console.log('[예약취소 검사]', {
+    today,
+    now,
+    reservationDate: reservation.date,
+    startTime: reservation.startTime,
+    startTimeType: typeof reservation.startTime,
+    conditionDateMatch: reservation.date === today,
+    conditionTimePassed: now >= reservation.startTime
+  });
+
   if (reservation.date === today && now >= reservation.startTime) {
+    console.log('❌ 취소 금지: 이미 시작된 예약입니다.');
     return createResponse(false, '이미 시작된 예약은 취소할 수 없습니다.');
   }
 
   reservation.cancel();
   await reservation.save();
 
+  console.log('✅ 예약 취소 완료');
   return createResponse(true, '예약이 취소되었습니다.', reservation);
 };
+
 
 exports.extendReservation = async (reservationId, nowDecimal) => {
   const reservation = await Reservation.findOne({ reservationId });

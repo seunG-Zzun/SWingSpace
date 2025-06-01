@@ -24,8 +24,11 @@ const TimeUtils = {
 
     getTodayDate() {
       const now = new Date();
-      return now.toISOString().split('T')[0];
+      const tzOffset = now.getTime() + (9 * 60 * 60 * 1000); // KST: UTC+9
+      const kstDate = new Date(tzOffset);
+      return kstDate.toISOString().split('T')[0];
     }
+
     
     
   };
