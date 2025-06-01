@@ -1,0 +1,77 @@
+.admin-dashboard {
+  padding: 40px;
+  max-width: 1000px;
+  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.admin-dashboard h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.admin-dashboard h3 {
+  margin-top: 30px;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.returned-text,
+.cancelled-text {
+  color: #888;
+  font-style: italic;
+}
+
+button {
+  margin: 0 5px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+/* 경고 버튼: 노랑 */
+button:contains(\"경고\"), .warn-button {
+  background-color: #f1c40f;
+  color: #000;
+}
+
+/* 탈퇴 버튼: 빨강 */
+button:contains(\"탈퇴\"), .remove-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* 정지된 사용자 강조 */
+td:has(.banned), .banned-cell {
+  background-color: #ffe6e6;
+  color: #c0392b;
+  font-weight: bold;
+}
