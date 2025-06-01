@@ -33,5 +33,10 @@ userSchema.methods.addWarning = async function () {
   await this.save();
 };
 
+userSchema.methods.checkIfBanned = function () {
+  return this.warningCount >= 4;
+};
+
+
 const User = mongoose.model('User', userSchema);
 module.exports = User;

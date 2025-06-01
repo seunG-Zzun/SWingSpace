@@ -18,16 +18,7 @@ exports.addWarning = async (req, res) => {
     if (!user) return res.status(404).json({ success: false, message: '사용자 없음' });
 
     user.warningCount += 1;
-    if (user.warningCount >= 4) user.isBanned = true;
-    await user.save();
-
-    if (user.isBanned) {
-      const today = TimeUtils.getTodayDate();
-      await Reservation.updateMany(
-        { studentId, date: { $gte: today }, status: 'reserved' },
-        { $set: { status: 'cancelled' } }
-      );
-    }
+    await user.save(); // ✅ 정지 처리 X
 
     res.json({ success: true, message: '경고 1회 부여 완료', data: user });
   } catch (err) {
@@ -44,8 +35,8 @@ exports.removeUser = async (req, res) => {
       return res.status(404).json({ success: false, message: '사용자 없음' });
     }
 
-    if (user.warningCount < 4) {
-      return res.status(400).json({ success: false, message: '경고 4회 미만 사용자입니다.' });
+    if (user.warningCount < 1) {
+      return res.status(400).json({ success: false, message: '경고가 부여되지 않은 사용자입니다.' });
     }
 
     user.isBanned = true;
@@ -62,6 +53,7 @@ exports.removeUser = async (req, res) => {
     return res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }
 };
+
 
 exports.dashboard = async (req, res) => {
   try {
