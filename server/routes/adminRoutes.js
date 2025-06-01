@@ -4,7 +4,7 @@ const adminController = require('../controllers/AdminController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 const isAdmin = (req, res, next) => {
-  const user = req.user;
+  const user = req.user; 
 
   if (!user || user.role !== 'admin') {
     return res.status(403).json({ success: false, message: '관리자 권한이 필요합니다.' });
@@ -13,7 +13,6 @@ const isAdmin = (req, res, next) => {
 };
 
 router.use(authMiddleware);
-
 router.use(isAdmin);
 
 router.get('/dashboard', adminController.dashboard);

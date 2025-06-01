@@ -8,6 +8,7 @@ const formatReservation = (r) => ({
   endTimeStr: TimeUtils.toTimeString(r.endTime)
 });
 
+
 exports.getAllReservations = async (req, res) => {
   try {
     const result = await reservationService.getAllReservations();

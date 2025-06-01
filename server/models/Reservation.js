@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const reservationSchema = new mongoose.Schema({
   studentId: { type: String, required: true },
   spaceId: { type: Number, required: true },
@@ -6,10 +8,8 @@ const reservationSchema = new mongoose.Schema({
   club: { type: String, required: true },
   seatIndex: { type: Number, required: true },
   date: { type: String, required: true },
-
   isExtended: { type: Boolean, default: false },
   returnedAt: { type: Date, default: null },
-
   status: {
     type: String,
     enum: ['reserved', 'cancelled', 'returned'],
