@@ -18,11 +18,10 @@ exports.addWarning = async (req, res) => {
     if (!user) return res.status(404).json({ success: false, message: '사용자 없음' });
 
     user.warningCount += 1;
+    if (user.warningCount >= 4) user.isBanned = true;
     await user.save();
 
-    if (user.warningCount >= 4) {
-      await User.updateOne({ studentId }, { isBanned: true });
-
+    if (user.isBanned) {
       const today = TimeUtils.getTodayDate();
       await Reservation.updateMany(
         { studentId, date: { $gte: today }, status: 'reserved' },
@@ -49,7 +48,8 @@ exports.removeUser = async (req, res) => {
       return res.status(400).json({ success: false, message: '경고 4회 미만 사용자입니다.' });
     }
 
-    await User.updateOne({ studentId }, { isBanned: true });
+    user.isBanned = true;
+    await user.save();
 
     const today = TimeUtils.getTodayDate();
     await Reservation.updateMany(
@@ -102,7 +102,7 @@ exports.dashboard = async (req, res) => {
       return {
         studentId: u.studentId,
         warningCount: u.warningCount,
-        isBanned: u.warningCount >= 4,
+        isBanned: u.isBanned === true,
         unreturnedCount: reservations.length,
         unreturnedDetails: reservations.map(r => ({
           reservationId: r.reservationId,

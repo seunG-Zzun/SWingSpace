@@ -6,19 +6,25 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
+
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ success: false, message: '인증 토큰이 필요합니다.' });
   }
 
   const token = authHeader.split(' ')[1];
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log('[DEBUG] decoded.studentId:', decoded.studentId);
     const user = await User.findOne({ studentId: decoded.studentId });
-    console.log('[DEBUG] DB 조회 결과:', user);
+
     if (!user) {
       return res.status(403).json({ success: false, message: '유효하지 않은 사용자입니다.' });
     }
+
+    if (user.isBanned) {
+      return res.status(403).json({ success: false, message: '정지된 사용자는 접근할 수 없습니다.' });
+    }
+
     req.user = user;
     next();
   } catch (err) {
@@ -27,6 +33,3 @@ const authMiddleware = async (req, res, next) => {
 };
 
 module.exports = authMiddleware;
-
-
-

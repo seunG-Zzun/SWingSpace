@@ -17,7 +17,6 @@ exports.getAllReservations = async (req, res) => {
   }
 };
 
-
 exports.createReservation = async (req, res) => {
   const { spaceId, startTime, endTime, club, seatIndex, date } = req.body;
   const studentId = req.user.studentId; 
@@ -80,7 +79,7 @@ exports.cancelReservation = async (req, res) => {
 
 exports.extendReservation = async (req, res) => {
   try {
-    const { reservationId } = req.params; //body->params로 수정
+    const { reservationId } = req.params;
     const now = TimeUtils.getNowDecimal();
     const result = await reservationService.extendReservation(reservationId, now);
     res.status(result.success ? 200 : 400).json(result);
@@ -91,7 +90,7 @@ exports.extendReservation = async (req, res) => {
 
 exports.returnReservation = async (req, res) => {
   try {
-    const { reservationId } = req.params; //body->params로 수정
+    const { reservationId } = req.params;
     const result = await reservationService.returnReservation(reservationId);
     res.status(result.success ? 200 : 400).json(result);
   } catch (err) {

@@ -7,13 +7,16 @@ exports.signUp = async (req, res) => {
   const { name, studentId, password, role, club } = req.body;
 
   try {
-    const banned = await User.findOne({ studentId, isBanned: true });
-    if (banned) {
-      return res.status(403).json({ success: false, message: '경고 누적으로 정지된 사용자는 재가입할 수 없습니다.' });
+    if (!password || password.trim() === '') {
+      return res.status(400).json({ success: false, message: '비밀번호를 입력해주세요.' });
     }
 
-    const exists = await User.findOne({ studentId });
-    if (exists) {
+    const existing = await User.findOne({ studentId });
+
+    if (existing) {
+      if (existing.isBanned) {
+        return res.status(403).json({ success: false, message: '경고 누적으로 정지된 사용자는 재가입할 수 없습니다.' });
+      }
       return res.status(400).json({ success: false, message: '이미 존재하는 아이디입니다.' });
     }
 
@@ -52,8 +55,8 @@ exports.login = async (req, res) => {
       return res.status(401).json({ success: false, message: '로그인 실패. 학번 또는 비밀번호 확인.' });
     }
 
-    if (user.checkifBanned) {
-      return res.status(403).json({ success: false, message: '이 사용자는 정지되었습니다.' });
+    if (user.checkIfBanned && user.checkIfBanned()) {
+      return res.status(403).json({ success: false, message: '이 사용자는 경고 4회로 정지되었습니다.' });
     }
 
     const token = jwt.sign(
@@ -63,7 +66,7 @@ exports.login = async (req, res) => {
     );
 
     const { password: _, ...safeUser } = user.toObject();
-    res.json({ success: true, message: '환영합니다.', token, data: safeUser });
+    res.json({ success: true, message: '환영합니다.', token, data: { ...safeUser, warningCount: user.warningCount, isBanned: user.isBanned } });
   } catch (err) {
     res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }
@@ -72,7 +75,15 @@ exports.login = async (req, res) => {
 exports.getMyInfo = async (req, res) => {
   try {
     const { password, ...safeUser } = req.user.toObject();
-    res.json({ success: true, message: '사용자 정보 조회 성공', data: safeUser });
+    res.json({
+      success: true,
+      message: '사용자 정보 조회 성공',
+      data: {
+        ...safeUser,
+        warningCount: req.user.warningCount,
+        isBanned: req.user.isBanned
+      }
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }

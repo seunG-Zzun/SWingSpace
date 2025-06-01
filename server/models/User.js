@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next(); 
+  if (!this.isModified('password')) return next();
   try {
     this.password = await bcrypt.hash(this.password, 10);
     next();
@@ -21,20 +21,16 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-
-
 userSchema.methods.comparePassword = async function (inputPassword) {
   return await bcrypt.compare(inputPassword, this.password);
 };
 
-
-userSchema.methods.addWarning = function () {
+userSchema.methods.addWarning = async function () {
   this.warningCount++;
-};
-
-
-userSchema.methods.checkifBanned = function () {
-  return this.warningCount >= 4;
+  if (this.warningCount >= 4) {
+    this.isBanned = true;
+  }
+  await this.save();
 };
 
 const User = mongoose.model('User', userSchema);
