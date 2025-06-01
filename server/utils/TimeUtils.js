@@ -20,9 +20,16 @@ const TimeUtils = {
       const start = this.toTimeString(startTime);
       const end = this.toTimeString(endTime);
       return `${date} ${start} ~ ${end}`;
+    },
+
+    getTodayDate() {
+      const now = new Date();
+      return now.toISOString().split('T')[0];
     }
     
+    
   };
+  
   
   
   module.exports = TimeUtils;

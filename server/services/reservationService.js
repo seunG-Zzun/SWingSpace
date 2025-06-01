@@ -27,6 +27,7 @@ exports.createReservation = (studentId, spaceId, startTime, endTime, club, seatI
     r.startTime < endTime &&
     r.endTime > startTime
   );
+  
 
   const duplicateByUser = reservations.some(r =>
     r.studentId === studentId &&
@@ -104,6 +105,28 @@ exports.extendReservation = (reservationId, nowDecimal) => {
   return createResponse(true, '예약이 1시간 연장되었습니다.', reservation);
 };
 
+
+
+exports.returnReservation = (reservationId) => {
+  const reservation = reservations.find(r => r.reservationId === reservationId);
+  if (!reservation) return createResponse(false, '예약을 찾을 수 없습니다.');
+  if (reservation.status!=='reserved') return createResponse(false, '이미 처리된 예약입니다.');
+  reservation.returnReservation(); 
+  return createResponse(true, '반납 완료', reservation);
+}
+
+
+exports.getOverdueReservationsByClub = (adminClub, now) => {
+  return reservations.filter(r =>
+    r.status === 'reserved' &&
+    !r.returned &&
+    now > r.endTime + 1 / 6 && 
+    r.date === TimeUtils.getTodayDate() &&
+    r.club === adminClub
+  );
+};
+
+
 exports.getReservationsByStudent = (studentId, includeCancelled = false) => {
   const myReservations = reservations.filter(
     r => r.studentId === studentId &&
@@ -120,3 +143,11 @@ exports.getReservationsByDate = (date) => {
 exports.getAllReservations = () => {
   return createResponse(true, '전체 예약 목록 조회 성공', reservations);
 };
+
+
+exports.getAllReservations = () => {
+  return createResponse(true, '전체 예약 목록 조회 성공', res)
+}
+
+
+expor

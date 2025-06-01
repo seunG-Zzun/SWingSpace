@@ -9,6 +9,9 @@ class Reservation {
     this.seatIndex = seatIndex;
     this.date = date;
     this.isExtended = false;
+    this.returned = false;
+    this.returnedAt = null;
+
     this.status = "reserved";
   }
   
@@ -20,9 +23,13 @@ class Reservation {
       this.status = "cancelled";
     }
   
+
     returnReservation() {
       this.status = "returned";
+      this.returned = true;
+      this.returnedAt = TimeUtils.getNowDecimal();
     }
+    
   
     canBeExtended(now, isAvailable) {
       return now >= this.endTime - 0.5 && isAvailable;
