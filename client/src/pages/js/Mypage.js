@@ -92,7 +92,9 @@ function MyPage() {
           <h2>나의 예약 목록</h2>
           <div className="my-warning"> 나의 경고 횟수:
              <span className="warning-count">{user?.warningCount ?? 0}회</span>
-             <h6 className="warning-text">경고 4회: 정지, 누적 8회: 탈퇴</h6>
+             <h6 className="warning-text">경고 4회: 정지 및 탈퇴 처리, 재가입 불가 <br/>
+                                          사용 종료시간 10분 이내 미반납: 경고 1회 <br/>
+                                          타 이용자의 신고 및 제보: 경고 1회</h6>
               </div>
            </div>
         {reservations.length === 0 ? (
@@ -105,7 +107,6 @@ function MyPage() {
                   <button
                     className="action-button return-button top-right"
                     onClick={() => returnReservation(r.reservationId)}
-                    // disabled={}
                   >
                     반납
                   </button>
