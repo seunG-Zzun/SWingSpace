@@ -29,6 +29,25 @@ exports.addWarning = async (req, res) => {
     res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }
 };
+exports.cancelWarning = async (req, res) => { //tmp
+  try {
+    const { studentId } = req.params;
+    const user = await User.findOne({ studentId });
+    if (!user) return res.status(404).json({ success: false, message: '사용자 없음' });
+    
+    
+    if (user.warningCount <= 0) {
+      return res.status(400).json({ success: false, message: '경고 취소 불가: 경고 횟수가 0회입니다.' });
+    }
+    else {
+      user.warningCount -= 1;
+      await user.save();
+      res.json({ success: true, message: '경고 취소 완료', data: user });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: '서버 오류', error: err.message });
+  }
+};
 exports.removeUser = async (req, res) => {
   try {
     const { studentId } = req.params;

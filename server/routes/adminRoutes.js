@@ -23,4 +23,5 @@ router.get('/users', adminController.getAllUsers);
 router.post('/users/:studentId/warning', adminController.addWarning);
 router.delete('/users/:studentId/remove', adminController.removeUser);
 
+router.post('/users/:studentId/cancelWarning', adminController.cancelWarning); //tmp
 module.exports = router;

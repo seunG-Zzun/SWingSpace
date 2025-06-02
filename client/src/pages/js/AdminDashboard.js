@@ -41,6 +41,18 @@ function AdminDashboard() {
       alert('⚠ 경고 추가 실패');
     }
   };
+  const cancelWarning = async (studentId) => { //tmp
+    try {
+      const res = await axios.post(`/admin/users/${studentId}/cancelWarning`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert(res.data.message);
+      fetchDashboard();
+    } catch (err) {
+      const msg = err.response?.data?.message || '경고 취소 중 오류 발생';
+      alert(msg);
+    }
+  };
 
   const removeUser = async (studentId) => {
     if (!window.confirm('정말 해당 사용자를 탈퇴시키겠습니까?')) return;
@@ -90,6 +102,7 @@ function AdminDashboard() {
                 </td>
                 <td>
                   <button onClick={() => addWarning(u.studentId)}>⚠ 경고</button>
+                  <button onClick={() => cancelWarning(u.studentId)}>➖ 경고 취소 </button>
                   {u.isBanned && (
                     <button onClick={() => removeUser(u.studentId)}>❌ 탈퇴</button>
                   )}
