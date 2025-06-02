@@ -41,7 +41,7 @@ function AdminDashboard() {
       alert('⚠ 경고 추가 실패');
     }
   };
-  const cancelWarning = async (studentId) => { //tmp
+  const cancelWarning = async (studentId) => {
     try {
       const res = await axios.post(`/admin/users/${studentId}/cancelWarning`, {}, {
         headers: { Authorization: `Bearer ${token}` }

@@ -95,10 +95,19 @@ exports.extendReservation = async (reservationId, nowDecimal) => {
   const reservation = await Reservation.findOne({ reservationId });
   if (!reservation) return createResponse(false, '예약을 찾을 수 없습니다.');
   if (reservation.status !== 'reserved') return createResponse(false, '유효하지 않은 예약입니다.');
-  if (reservation.isExtended) return createResponse(false, '이미 한 번 연장된 예약입니다.');
+  if (reservation.isExtended) return createResponse(false, '이미 한 번 연장되었거나, 예약이 종료되었습니다.');
+
+  const today = TimeUtils.getTodayDate();
+  if (reservation.date !== today) {
+    return createResponse(false, '오늘 날짜의 예약만 연장할 수 있습니다.');
+  }
+
+  const withinExtendWindow = nowDecimal >= reservation.endTime - 0.5 && nowDecimal <= reservation.endTime;
+  if (!withinExtendWindow) {
+    return createResponse(false, '예약 종료 30분 전부터만 연장할 수 있습니다.');
+  }
 
   const newEndTime = reservation.endTime + 1.0;
-  const withinExtendWindow = nowDecimal >= reservation.endTime - 0.5 && nowDecimal <= reservation.endTime;
 
   const conflict = await Reservation.exists({
     spaceId: reservation.spaceId,
@@ -113,10 +122,6 @@ exports.extendReservation = async (reservationId, nowDecimal) => {
     ]
   });
 
-  if (!withinExtendWindow) {
-    return createResponse(false, '예약 종료 30분 전부터만 연장할 수 있습니다.');
-  }
-
   if (conflict) {
     return createResponse(false, '해당 시간대에 이미 예약이 있어 연장할 수 없습니다.');
   }
@@ -126,6 +131,7 @@ exports.extendReservation = async (reservationId, nowDecimal) => {
   return createResponse(true, '예약이 1시간 연장되었습니다.', reservation);
 };
 
+
 exports.returnReservation = async (reservationId) => {
   const reservation = await Reservation.findOne({ reservationId });
   if (!reservation) return createResponse(false, '예약을 찾을 수 없습니다.');
@@ -134,7 +140,10 @@ exports.returnReservation = async (reservationId) => {
   const now = TimeUtils.getNowDecimal();
   const today = TimeUtils.getTodayDate();
 
-  if (reservation.date === today && now < reservation.startTime) {
+  if (
+    (reservation.date === today && now < reservation.startTime) ||
+    (reservation.date > today) // 미래 날짜면 무조건 아직 시작 전
+  ) {
     return createResponse(false, '예약 시작 시간 이전에는 반납할 수 없습니다.');
   }
 
@@ -142,6 +151,7 @@ exports.returnReservation = async (reservationId) => {
   await reservation.save();
   return createResponse(true, '반납 완료', reservation);
 };
+
 
 exports.getOverdueReservationsByClub = async (adminClub, now) => {
   const today = TimeUtils.getTodayDate();

@@ -4,11 +4,13 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   studentId: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // 해시 저장
+  password: { type: String, required: true }, 
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
   club: { type: String, required: function () { return this.role !== 'admin'; } },
-  warningCount: { type: Number, default: 0 }
+  warningCount: { type: Number, default: 0 },
+  isWithdrawn: { type: Boolean, default: false }
 });
+
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next(); 

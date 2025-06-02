@@ -8,15 +8,15 @@ exports.signUp = async (req, res) => {
   const { name, studentId, password, role, club } = req.body;
 
   try {
+    const withdrawn = await User.findOne({ studentId, isWithdrawn: true }).lean();
+    if (withdrawn && withdrawn.warningCount >= 4) {
+      return res.status(403).json({ success: false, message: '경고 누적으로 탈퇴된 계정은 재가입할 수 없습니다.' });
+    }
     const exists = await User.findOne({ studentId });
     if (exists) {
       return res.status(400).json({ success: false, message: '이미 존재하는 아이디입니다.' });
     }
 
-    const withdrawn = await User.findOne({ studentId }).lean();
-    if (withdrawn && withdrawn.warningCount >= 4) {
-      return res.status(403).json({ success: false, message: '경고 누적으로 탈퇴된 계정은 재가입할 수 없습니다.' });
-    }
 
     const adminList = [
       { studentId: "20233114", club: "DOUM" },
@@ -49,7 +49,15 @@ exports.login = async (req, res) => {
   const { studentId, password } = req.body;
   try {
     const user = await User.findOne({ studentId });
-    if (!user || !(await user.comparePassword(password))) {
+    if (!user) {
+      return res.status(401).json({ success: false, message: '로그인 실패. 학번 또는 비밀번호 확인.' });
+    }
+
+    if (user.isWithdrawn) {
+      return res.status(403).json({ success: false, message: '탈퇴된 사용자입니다. 재가입이 불가능합니다.' });
+    }
+
+    if (!(await user.comparePassword(password))) {
       return res.status(401).json({ success: false, message: '로그인 실패. 학번 또는 비밀번호 확인.' });
     }
 
