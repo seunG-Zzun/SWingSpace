@@ -22,6 +22,11 @@ exports.addWarning = async (req, res) => {
 
     if (user.warningCount >= 4) {
       console.log("이 사용자는 정지되었습니다.");
+
+      await Reservation.updateMany(
+        { studentId, status: 'reserved' },
+        { $set: { status: 'cancelled' } }
+      );
     }
 
     res.json({ success: true, message: '경고 부여 완료', data: user });
@@ -29,6 +34,7 @@ exports.addWarning = async (req, res) => {
     res.status(500).json({ success: false, message: '서버 오류', error: err.message });
   }
 };
+
 exports.removeUser = async (req, res) => {
   try {
     const { studentId } = req.params;
@@ -36,8 +42,8 @@ exports.removeUser = async (req, res) => {
     if (!user) return res.status(404).json({ success: false, message: '사용자 없음' });
     if (user.warningCount < 4) return res.status(400).json({ success: false, message: '경고 4회 미만 사용자입니다.' });
 
-    await Reservation.deleteMany({ studentId });
-    await User.deleteOne({ studentId });
+    user.isWithdrawn = true;
+    await user.save();
 
     res.json({ success: true, message: '사용자 탈퇴 완료 및 예약 삭제 완료' });
   } catch (err) {
