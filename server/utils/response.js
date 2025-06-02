@@ -1,4 +1,3 @@
-//temp
 exports.success = (data, message = '성공') => ({
   success: true,
   message,

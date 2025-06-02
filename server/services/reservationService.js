@@ -67,7 +67,7 @@ exports.cancelReservation = async (reservationId) => {
   const now = TimeUtils.getNowDecimal();
   const today = TimeUtils.getTodayDate();
 
-  // ✅ 디버깅용 로그
+  //debugging
   console.log('[예약취소 검사]', {
     today,
     now,

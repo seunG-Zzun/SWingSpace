@@ -57,19 +57,16 @@ button:hover {
   opacity: 0.85;
 }
 
-/* 경고 버튼: 노랑 */
 button:contains(\"경고\"), .warn-button {
   background-color: #f1c40f;
   color: #000;
 }
 
-/* 탈퇴 버튼: 빨강 */
 button:contains(\"탈퇴\"), .remove-button {
   background-color: #e74c3c;
   color: white;
 }
 
-/* 정지된 사용자 강조 */
 td:has(.banned), .banned-cell {
   background-color: #ffe6e6;
   color: #c0392b;

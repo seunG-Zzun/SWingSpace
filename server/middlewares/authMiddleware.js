@@ -1,4 +1,4 @@
-// ✅ authMiddleware.js - JWT 인증 미들웨어
+// authMiddleware.js - JWT 인증 미들웨어
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
@@ -15,7 +15,7 @@ const authMiddleware = async (req, res, next) => {
     const decoded = jwt.verify(token, JWT_SECRET);
     console.log('[DEBUG] decoded.studentId:', decoded.studentId);//debugging
     const user = await User.findOne({ studentId: decoded.studentId });
-    console.log('[DEBUG] DB 조회 결과:', user);
+    console.log('[DEBUG] DB 조회 결과:', user); //debugging
     if (!user) {
       return res.status(403).json({ success: false, message: '유효하지 않은 사용자입니다.' });
     }

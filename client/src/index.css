@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-image: url('./assets/container_background.png'); /* 경로는 CSS 기준 상대경로 */
+  background-image: url('./assets/container_background.png');
   background-size: cover;      
   background-position: center; 
   background-repeat: no-repeat;

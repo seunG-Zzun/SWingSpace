@@ -111,7 +111,7 @@ select:hover {
 
 .seat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3열 */
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   justify-items: center;
   margin-top: 16px;
@@ -139,7 +139,7 @@ select:hover {
   color: white;
   cursor: not-allowed;
 }
-/* 예약된 좌석 스타일 (JS에서 reserved 시 적용 가능) */
+
 .seat-box.reserved {
   background-color: #bbb;
   cursor: not-allowed;
