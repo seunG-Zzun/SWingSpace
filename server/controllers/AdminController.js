@@ -107,10 +107,10 @@ exports.dashboard = async (req, res) => {
     const data = await Promise.all(sameClubUsers.map(async (u) => {
       const reservations = await Reservation.find({
         studentId: u.studentId,
-        status: 'reserved',
-        returned: false,
+        club: admin.club,
         date: today,
-        endTime: { $lt: now - 1 / 6 }
+        endTime: { $lt: now - 1 / 6 },
+        returnWarningGiven: true
       });
 
       return {

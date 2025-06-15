@@ -1,6 +1,7 @@
 const Reservation = require('../models/Reservation');
 const { createResponse } = require('../utils/response');
 const TimeUtils = require('../utils/TimeUtils');
+const User = require('../models/User');
 
 exports.createReservation = async (studentId, spaceId, startTime, endTime, club, seatIndex, date) => {
   const reservationId = `${studentId}_${Date.now()}`;
@@ -148,8 +149,16 @@ exports.returnReservation = async (reservationId) => {
   }
 
   reservation.returnReservation(now);
+  if ((now > reservation.endTime) || (reservation.date < today)){
+    const user = await User.findOne({ studentId: reservation.studentId });
+    if (user && !reservation.returnWarningGiven) {
+      user.warningCount += 1;
+      reservation.returnWarningGiven = true;
+      await user.save();
+    }
+  }
   await reservation.save();
-  return createResponse(true, '반납 완료', reservation);
+  return createResponse(true, '반납이 완료되었습니다. 반납 시간을 초과하였다면, 관리자의 확인 후 경고가 부여될 수 있습니다.', reservation);
 };
 
 
